@@ -45,4 +45,10 @@
             tag=#{tag}
         where id = #{id}
     </update>
+    
+    <update id="updateViewCount" parameterType="Question">
+        update question
+        set view_count=view_count+1
+        where id = #{id}
+    </update>
 </mapper>

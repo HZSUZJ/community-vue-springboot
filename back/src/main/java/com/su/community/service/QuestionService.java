@@ -91,4 +91,11 @@ public class QuestionService {
             questionMapper.update(question);
         }
     }
+    public void  incView(Integer id){
+        Question question=new Question();
+        question.setId(id);
+        questionMapper.updateViewCount(question);
+    }
+
+
 }

@@ -20,4 +20,6 @@ public interface QuestionMapper {
     Question getById(Integer id);
 
     int update(Question question);
+
+    int updateViewCount(Question question);
 }
