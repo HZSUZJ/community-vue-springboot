@@ -1,13 +1,11 @@
 <template>
-
+	<h1>Download</h1>
 </template>
 
 <script>
 export default {
-  name: "Download"
-}
+	name: "Download",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -3,34 +3,27 @@
 		<div class="nav-bar">
 			<ul>
 				<li>
-					<a href="#" class="active">
-						<i class="fas fa-list-ul"></i>
-						<span>发现</span>
-					</a>
+					<nav-bar-item
+						itemName="发现"
+						icon="fa-list-ul"
+						itemPath="/home"
+					></nav-bar-item>
 				</li>
 				<li>
-					<a href="#">
-						<i class="fas fa-share"></i>
-						<span>分享</span>
-					</a>
+					<nav-bar-item
+						itemName="分享"
+						icon="fa-share"
+						itemPath="/slides"
+					></nav-bar-item>
 				</li>
 				<li>
-					<a href="#">
-						<i class="fas fa-newspaper"></i>
-						<span>文章</span>
-					</a>
+					<nav-bar-item itemName="文章" icon="fa-newspaper"></nav-bar-item>
 				</li>
 				<li>
-					<a href="#">
-						<i class="fas fa-file-text"></i>
-						<span>活动</span>
-					</a>
+					<nav-bar-item itemName="活动" icon="fa-file-text"></nav-bar-item>
 				</li>
 				<li>
-					<a href="#">
-						<i class="fas fa-download"></i>
-						<span>下载</span>
-					</a>
+					<nav-bar-item itemName="下载" icon="fa-download"></nav-bar-item>
 				</li>
 			</ul>
 		</div>
@@ -38,8 +31,12 @@
 </template>
 
 <script>
+import navBarItem from "@/components/common/navBar/navBarItem";
 export default {
 	name: "navBar",
+	components: {
+		navBarItem,
+	},
 };
 </script>
 

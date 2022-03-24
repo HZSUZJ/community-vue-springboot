@@ -15,7 +15,7 @@
 				</form>
 			</div>
 			<!--导航韩-->
-			<nav-bar></nav-bar>
+			<nav-bar class="nav-bar"></nav-bar>
 			<div class="login-wrapper">
 				<a href="#" class="login">登录</a>
 			</div>
@@ -23,7 +23,7 @@
 	</div>
 </template>
 <script>
-import navBar from "@/components/common/topbar/navBar";
+import navBar from "@/components/common/navBar/navBar";
 export default {
 	name: "topBar",
 	components: {
@@ -33,7 +33,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scope>
 @import "@/assets/fa/css/all.css";
 @top-height: 52px;
 .top-bar-wrapper {
@@ -43,16 +43,21 @@ export default {
 	background-color: #499ef3;
 	.top-bar {
 		display: flex;
+		max-width: 1500px !important;
 		width: 1170px;
 		line-height: @top-height;
 		height: @top-height;
-		margin: 0 auto;
+		padding-right: 15px;
+		padding-left: 15px;
 		position: relative;
+		right: 0;
+		left: 0;
+		margin-right: auto;
+		margin-left: auto;
 		align-items: center;
 		.logo {
 			width: 90px;
 			height: 40px;
-
 			a {
 				display: block;
 				width: 90px;
@@ -71,7 +76,6 @@ export default {
 		position: relative;
 		.navbar-search {
 			margin: 0;
-
 			input {
 				width: 194px;
 				height: 20px;
@@ -108,6 +112,38 @@ export default {
 			padding: 6px 12px;
 			font-size: 14px;
 			color: #fff;
+		}
+	}
+	@media (min-width: 1200px) {
+		.top-bar {
+			width: 1170px px;
+		}
+	}
+	@media (min-width: 992px) and (max-width: 1119px) {
+		.top-bar {
+			width: 970px;
+		}
+		.search {
+			display: none;
+		}
+	}
+	@media (min-width: 768px) and (max-width: 991px) {
+		.top-bar {
+			width: 750px;
+		}
+		.search {
+			display: none;
+		}
+	}
+	@media (max-width: 767px) {
+		.top-bar {
+			width: auto;
+		}
+		.search {
+			display: none;
+		}
+		.nav-bar {
+			display: none;
 		}
 	}
 }

@@ -13,22 +13,27 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path:'/home',
+    name:'/home',
     component:Home
   },
   {
     path:'/article',
+    name:'/article',
     component:Article
   },
   {
     path:'/download',
+    name:'download',
     component:Download
   },
   {
     path:'/event',
+    name:'event',
     component:Event
   },
   {
     path:'/slides',
+    name:'/slides',
     component:Slides
   },
 
