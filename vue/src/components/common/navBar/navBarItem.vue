@@ -1,5 +1,5 @@
 <template>
-	<a :href="path" @click="itemClick" :class="{ active: isActive }">
+	<a @click="itemClick" :class="{ active: isActive }">
 		<i class="fas" :class="icon"></i>
 		<span>{{ itemName }}</span>
 	</a>
@@ -17,16 +17,14 @@ export default {
 	},
 	setup(props) {
 		const router = useRouter();
-		const fullPath = router.currentRoute.value.fullPath;
-		console.log(router);
-		let isActive = computed(() => {
-			// return route.path.indexOf(this.path) !== -1;
-		});
+
 		// console.log(this.$route);
 		const itemClick = () => {
-			router.push({ name: props.itemPath });
+			router.push({ path: props.itemPath });
 		};
-
+		let isActive = computed(() => {
+			return router.currentRoute.value.fullPath.indexOf(props.itemPath) !== -1;
+		});
 		return { isActive, itemClick };
 	},
 };

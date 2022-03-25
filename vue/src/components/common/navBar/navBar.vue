@@ -17,13 +17,25 @@
 					></nav-bar-item>
 				</li>
 				<li>
-					<nav-bar-item itemName="文章" icon="fa-newspaper"></nav-bar-item>
+					<nav-bar-item
+						itemName="文章"
+						icon="fa-newspaper"
+						itemPath="/article"
+					></nav-bar-item>
 				</li>
 				<li>
-					<nav-bar-item itemName="活动" icon="fa-file-text"></nav-bar-item>
+					<nav-bar-item
+						itemName="活动"
+						icon="fa-file-text"
+						itemPath="/event"
+					></nav-bar-item>
 				</li>
 				<li>
-					<nav-bar-item itemName="下载" icon="fa-download"></nav-bar-item>
+					<nav-bar-item
+						itemName="下载"
+						icon="fa-download"
+						itemPath="/download"
+					></nav-bar-item>
 				</li>
 			</ul>
 		</div>
