@@ -14,7 +14,7 @@
         where token = #{token}
     </select>
 
-    <select id="findById" parameterType="int" resultType="User">
+    <select id="findById" resultType="User">
         select *
         from user
         where id = #{id}

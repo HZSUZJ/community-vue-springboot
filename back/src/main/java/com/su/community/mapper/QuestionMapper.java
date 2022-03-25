@@ -13,13 +13,15 @@ public interface QuestionMapper {
 
     Integer count();
 
-    List<Question> listByUserId(Integer userId, Integer offset, Integer size);
+    List<Question> listByUserId(Long userId, Integer offset, Integer size);
 
-    Integer countByUserId(Integer userId);
+    Integer countByUserId(Long userId);
 
-    Question getById(Integer id);
+    Question getById(Long id);
 
     int update(Question question);
 
     int updateViewCount(Question question);
+
+    int updateCommentCount(Question question);
 }

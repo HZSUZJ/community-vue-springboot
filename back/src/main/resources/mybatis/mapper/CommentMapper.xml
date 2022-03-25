@@ -8,4 +8,8 @@
         values (#{parentId}, #{type}, #{commentator}, #{gtmCreate}, #{gtmModified}, #{content})
     </insert>
 
+    <select id="findById" resultType="Comment">
+        select * from comment where id=#{id}
+    </select>
+
 </mapper>
