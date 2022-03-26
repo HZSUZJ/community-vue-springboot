@@ -6,6 +6,7 @@ import com.su.community.pojo.Comment;
 import com.su.community.pojo.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -15,6 +16,7 @@ public class CommentService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Transactional
     public void insert(Comment comment){
         /**
          * 1为回复问题

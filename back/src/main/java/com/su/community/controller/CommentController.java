@@ -44,6 +44,7 @@ public class CommentController {
         commentService.insert(comment);
         Map<Object, Object> objectObjectMap=new HashMap<>();
         objectObjectMap.put("message","成功");
+        objectObjectMap.put("code","200");
         return objectObjectMap;
     }
 }
