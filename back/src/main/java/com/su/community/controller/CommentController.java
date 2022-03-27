@@ -33,6 +33,9 @@ public class CommentController {
         if(user==null){
             return ResultDTO.errorOf(2003,"未登录不能进行评论，请先登录");
         }
+        if (commentCreateDTO.getContent()==null||"".equals(commentCreateDTO.getContent())){
+            return ResultDTO.errorOf(2004,"回复不能为空");
+        }
         Comment comment=new Comment();
         comment.setParentId(commentCreateDTO.getParentId());
         comment.setContent(commentCreateDTO.getContent());
