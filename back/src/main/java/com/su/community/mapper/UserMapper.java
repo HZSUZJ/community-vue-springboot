@@ -4,6 +4,8 @@ import com.su.community.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface UserMapper {
@@ -16,4 +18,6 @@ public interface UserMapper {
     User findByAccountId(String accountId);
 
     int update(User dbUser);
+
+    List<User> findByIds(List<Long> ids);
 }

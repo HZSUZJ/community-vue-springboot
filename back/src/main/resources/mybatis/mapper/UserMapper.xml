@@ -34,4 +34,13 @@
             avatar_url=#{avatarUrl}
         where id = #{id}
     </update>
+
+    <select id="findByIds" resultType="User" parameterType="list">
+        select *
+        from user
+        where id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

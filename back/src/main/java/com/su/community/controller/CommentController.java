@@ -1,6 +1,6 @@
 package com.su.community.controller;
 
-import com.su.community.dto.CommentDTO;
+import com.su.community.dto.CommentCreateDTO;
 import com.su.community.dto.ResultDTO;
 import com.su.community.mapper.CommentMapper;
 import com.su.community.pojo.Comment;
@@ -26,7 +26,7 @@ public class CommentController {
     private CommentService commentService;
 
     @RequestMapping(value = "/comment",method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request){
 
         User user = (User) request.getSession().getAttribute("user");
@@ -34,13 +34,13 @@ public class CommentController {
             return ResultDTO.errorOf(2003,"未登录不能进行评论，请先登录");
         }
         Comment comment=new Comment();
-        comment.setParentId(commentDTO.getParentId());
-        comment.setContent(commentDTO.getContent());
-        comment.setType(commentDTO.getType());
-        comment.setGtmCreate(System.currentTimeMillis());
-        comment.setGtmModified(System.currentTimeMillis());
-        comment.setCommentator(1);
-        comment.setContent(commentDTO.getContent());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setContent(commentCreateDTO.getContent());
+        comment.setType(commentCreateDTO.getType());
+        comment.setGmtCreate(System.currentTimeMillis());
+        comment.setGmtModified(System.currentTimeMillis());
+        comment.setCommentator(user.getId());
+        comment.setContent(commentCreateDTO.getContent());
         commentService.insert(comment);
         Map<Object, Object> objectObjectMap=new HashMap<>();
         objectObjectMap.put("message","成功");
