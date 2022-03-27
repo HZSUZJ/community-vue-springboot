@@ -8,13 +8,15 @@
     <script src="/js/jquery-3.6.0.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <style>
-        .menu .icon:hover{
+        .menu .icon:hover {
             color: #499ef3;
         }
-        .menu{
+
+        .menu {
             margin-top: 5px;
         }
-        .menu .icon{
+
+        .menu .icon {
             margin-right: 6px;
             cursor: pointer;
         }
@@ -41,12 +43,13 @@
                     编辑
                 </a>
             </div>
-<!--            回复部分-->
+            <!--            回复部分-->
             <h3>
                 <span th:text="${question.commentCount}"></span>个回复
             </h3>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment:${comments}" style="border-bottom: 1px solid;margin-bottom: 20px;padding-bottom: 15px">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment:${comments}"
+                 style="border-bottom: 1px solid;margin-bottom: 20px;padding-bottom: 15px">
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -54,21 +57,62 @@
                                  style="height: 40px;width: 40px">
                         </a>
                     </div>
-                    <div class="media-body">
+                    <div class="media-body" th:id="${'comment-body-'+comment.id}">
                         <h6 class="media-heading">
                             <span th:text="${comment.user.name}"></span>
+                            <div th:text="${comment.content}"></div>
+                            <div class="menu">
+                                <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-comment icon" aria-hidden="true"
+                                      th:data-id="${comment.id}"
+                                      onclick="collapseComments(this)"></span>
+                                <span class="pull-right"
+                                      th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                            </div>
+                            <!--                二级评论-->
+<!--                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse"-->
+<!--                                 th:id="${'comment-'+comment.id}">-->
+<!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment:${comments}"-->
+<!--                                     style="border-bottom: 1px solid;margin-bottom: 20px;padding-bottom: 15px">-->
+<!--                                    <div class="media">-->
+<!--                                        <div class="media-left">-->
+<!--                                            <a href="#">-->
+<!--                                                <img class="media-object img-circle" th:src="${comment.user.avatarUrl}"-->
+<!--                                                     alt="..."-->
+<!--                                                     style="height: 40px;width: 40px">-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <div class="media-body">-->
+<!--                                            <h6 class="media-heading">-->
+<!--                                                <span th:text="${comment.user.name}"></span>-->
+<!--                                            </h6>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div th:text="${comment.content}"></div>-->
+<!--                                    <div class="menu">-->
+<!--                                        <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>-->
+<!--                                        <span class="glyphicon glyphicon-comment icon" aria-hidden="true"-->
+<!--                                              th:data-id="${comment.id}"-->
+<!--                                              onclick="collapseComments(this)"></span>-->
+<!--                                        <span class="pull-right"-->
+<!--                                              th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+<!--                                    <input type="text" class="form-control" placeholder="评论一下..."-->
+<!--                                           th:id="${'input-'+comment.id}">-->
+<!--                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"-->
+<!--                                            th:data-id="${comment.id}">评论-->
+<!--                                    </button>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </h6>
                     </div>
                 </div>
-                <div th:text="${comment.content}"></div>
-                <div class="menu">
-                    <span class="glyphicon glyphicon-thumbs-up icon"  aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>
-                    <span class="pull-right" th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
-                </div>
+
             </div>
             <h3>提交回复</h3>
-<!--            回复输入框-->
+            <!--            回复输入框-->
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="commment_section">
                 <div class="media">
@@ -114,33 +158,31 @@
     </div>
 </div>
 <script type="text/javascript">
-    function post() {
-        var id = $("#question_id").val();
-        var content = $("#comment_content").val();
-        if(!content){
+    function comment2target(targetId, type, content) {
+        if (!content) {
             alert("不能回复空内容");
-            return ;
+            return;
         }
         $.ajax({
             type: "POST",
             contentType: "application/json",
             url: "/comment",
             data: JSON.stringify({
-                "parentId": id,
+                "parentId": targetId,
                 "content": content,
-                "type": 1
+                "type": type
             }),
             success: function (res) {
                 if (res.code == 200) {
-                   window.location.reload();
+                    window.location.reload();
                 } else {
-                    if (res.code == 2003){
-                        var isAccepted=confirm(res.message);
-                        if (isAccepted){
+                    if (res.code == 2003) {
+                        var isAccepted = confirm(res.message);
+                        if (isAccepted) {
                             window.open("https://github.com/login/oauth/authorize?client_id=a83ef6a867cc62146dab&redirect_uri=http://localhost:8080/callback&scope=user&state=1");
-                            window.localStorage.setItem("closable",true);
+                            window.localStorage.setItem("closable", true);
                         }
-                    }else{
+                    } else {
                         alert(res.message);
                     }
                 }
@@ -149,6 +191,62 @@
             dataType: "json"
         });
     }
+
+    // 提交回复
+    function post() {
+        var id = $("#question_id").val();
+        var content = $("#comment_content").val();
+        comment2target(id, 1, content);
+    }
+
+    // 展开二级评论
+    function collapseComments(e) {
+        var id = e.getAttribute("data-id");
+        var comments = $('#comment-' + id);
+
+        // 获取一下二级评论的展开状态
+        var collapse = e.getAttribute("data-collapse");
+        if (collapse) {
+            comments.removeClass("in");
+            e.removeAttribute("data-collapse");
+        } else {
+            $.getJSON("/comment/" + id, function (data) {
+                console.log(data);
+                var commentBody = $("comment-body-" + id);
+                var items = [];
+                $.each(data.data, function (comment) {
+                    var c =$("<div/>", {
+                        "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments",
+                        html: comment.content
+                    });
+                    items.push(c);
+                });
+
+                commentBody.append()
+
+                $("<div/>", {
+                    "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments",
+                    "id": "comment-" + id,
+                    html: items.join("")
+                }).appendTo(commentBody);
+
+
+                // 展开二级评论
+                comments.addClass("in");
+                // 标记二级评论展开状态
+                e.setAttribute("data-collapse", "in");
+
+            });
+
+        }
+    }
+
+    function comment(e) {
+        var commentId = e.getAttribute("data-id");
+        var content = $('#input-' + commentId).val();
+        comment2target(commentId, 2, content);
+    }
+
 </script>
 </body>
 </html>

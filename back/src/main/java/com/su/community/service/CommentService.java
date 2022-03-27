@@ -52,8 +52,8 @@ public class CommentService {
 
     }
 
-    public List<CommentDTO> listByQuestionId(Long id) {
-        List<Comment> comments = commentMapper.findByParentId(id, 1);
+    public List<CommentDTO> listByTargetId(Long id, Integer type) {
+        List<Comment> comments = commentMapper.findByParentId(id, type);
         if (comments.size() == 0) {
             return new ArrayList<>();
         }

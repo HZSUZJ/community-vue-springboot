@@ -1,6 +1,5 @@
 package com.su.community.controller;
 
-import com.su.community.dto.CommentCreateDTO;
 import com.su.community.dto.CommentDTO;
 import com.su.community.dto.QuestionDTO;
 import com.su.community.service.CommentService;
@@ -25,7 +24,7 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model) {
         QuestionDTO questionDTO=questionService.getById(id);
-        List<CommentDTO> comments=commentService.listByQuestionId(id);
+        List<CommentDTO> comments=commentService.listByTargetId(id,1);
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
         model.addAttribute("comments",comments);
