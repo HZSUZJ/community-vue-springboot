@@ -47,6 +47,10 @@ public class CommentService {
             Comment dbComment = commentMapper.findById(comment.getParentId());
             //添加异常
             commentMapper.insert(comment);
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1);
+            commentMapper.updateCommentCount(parentComment);
         }
 
 

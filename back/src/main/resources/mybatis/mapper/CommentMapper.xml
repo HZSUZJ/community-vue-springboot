@@ -16,4 +16,9 @@
         select * from comment where parent_id=#{parentId} and type=${type} ORDER BY gmt_create desc
     </select>
 
+    <update id="updateCommentCount" parameterType="Comment">
+        update comment
+        set comment_count=comment_count+#{commentCount}
+        where id = #{id}
+    </update>
 </mapper>

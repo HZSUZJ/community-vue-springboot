@@ -10,4 +10,5 @@ public interface CommentMapper {
     int insert(Comment comment);
     Comment findById(Long id);
     List<Comment> findByParentId(Long parentId,int type);
+    int updateCommentCount(Comment comment);
 }
