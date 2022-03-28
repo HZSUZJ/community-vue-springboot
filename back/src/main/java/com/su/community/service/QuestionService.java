@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -100,4 +102,18 @@ public class QuestionService {
     }
 
 
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        String[] tags=queryDTO.getTag().split(",");
+        String regexTg= Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question=new Question();
+        question.setTag(regexTg);
+        question.setId(queryDTO.getId());
+        List<Question> questions=questionMapper.selectRelated(question);
+        List<QuestionDTO>questionDTOS=questions.stream().map(q->{
+            QuestionDTO questionDTO=new QuestionDTO();
+            BeanUtils.copyProperties(q,questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
+    }
 }

@@ -10,7 +10,7 @@
 
     <select id="list" resultType="Question">
         select *
-        from question limit #{offset},#{size}
+        from question order by gmt_create desc  limit #{offset},#{size}
     </select>
 
     <select id="count" resultType="int">
@@ -57,4 +57,10 @@
         set comment_count=comment_count+#{commentCount}
         where id = #{id}
     </update>
+
+    <select id="selectRelated" parameterType="Question" resultType="Question">
+        select *
+        from question
+        where id != ${id} and tag regexp #{tag}
+    </select>
 </mapper>

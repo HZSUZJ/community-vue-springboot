@@ -24,4 +24,6 @@ public interface QuestionMapper {
     int updateViewCount(Question question);
 
     int updateCommentCount(Question question);
+
+    List<Question> selectRelated(Question question);
 }
