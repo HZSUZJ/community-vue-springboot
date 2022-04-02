@@ -3,6 +3,7 @@ package com.su.community.controller;
 import com.su.community.dto.PaginationDTO;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.User;
+import com.su.community.service.NotificationService;
 import com.su.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class ProfileController {
     private UserMapper userMapper;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private NotificationService notificationService;
+
 
     @GetMapping("/profile/{action}")
     public String profile(HttpServletRequest request,
@@ -48,12 +52,14 @@ public class ProfileController {
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
+            PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
         } else if ("replies".equals(action)) {
+            PaginationDTO paginationDTO=notificationService.list(user.getId(), page, size);
             model.addAttribute("section", "replies");
+            model.addAttribute("pagination", paginationDTO);
             model.addAttribute("sectionName", "最新回复");
         }
-        PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination", paginationDTO);
         return "profile";
     }
 

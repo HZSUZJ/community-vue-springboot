@@ -1,10 +1,14 @@
 package com.su.community.service;
 
 import com.su.community.dto.CommentDTO;
+import com.su.community.enums.NotificationStatusEnum;
+import com.su.community.enums.NotificationTypeEnum;
 import com.su.community.mapper.CommentMapper;
+import com.su.community.mapper.NotificationMapper;
 import com.su.community.mapper.QuestionMapper;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.Comment;
+import com.su.community.pojo.Notification;
 import com.su.community.pojo.Question;
 import com.su.community.pojo.User;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +31,8 @@ public class CommentService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     @Transactional
     public void insert(Comment comment) {
@@ -42,6 +48,8 @@ public class CommentService {
             commentMapper.insert(comment);
             question.setCommentCount(1);
             questionMapper.updateCommentCount(question);
+            //创建通知
+            createNotify(comment,question.getCreator(),NotificationTypeEnum.REPLY_QUESTION);
 
         } else {//回复评论
             Comment dbComment = commentMapper.findById(comment.getParentId());
@@ -51,9 +59,19 @@ public class CommentService {
             parentComment.setId(comment.getParentId());
             parentComment.setCommentCount(1);
             commentMapper.updateCommentCount(parentComment);
+            //创建通知
+            createNotify(comment,dbComment.getCommentator(),NotificationTypeEnum.REPLY_COMMENT);
         }
-
-
+    }
+    private void createNotify(Comment comment,Long receiver,NotificationTypeEnum notificationTypeEnum){
+        Notification notification=new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationTypeEnum.getType());
+        notification.setOuterId(comment.getParentId());
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByTargetId(Long id, Integer type) {
@@ -79,4 +97,6 @@ public class CommentService {
         }).collect(Collectors.toList());
         return commentDTOS;
     }
+
+
 }
