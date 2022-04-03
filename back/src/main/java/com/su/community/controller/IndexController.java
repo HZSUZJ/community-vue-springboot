@@ -3,6 +3,7 @@ package com.su.community.controller;
 import com.su.community.dto.PaginationDTO;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.User;
+import com.su.community.service.NotificationService;
 import com.su.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,8 @@ public class IndexController {
     private UserMapper userMapper;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping({"/","/index"})
     public String index(HttpServletRequest request,
@@ -34,6 +37,7 @@ public class IndexController {
                 User user = userMapper.findByToken(token);
                 if (user!=null){
                     request.getSession().setAttribute("user",user);
+
                 }
                 break;
             }

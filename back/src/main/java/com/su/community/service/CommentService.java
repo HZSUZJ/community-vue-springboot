@@ -49,7 +49,7 @@ public class CommentService {
             question.setCommentCount(1);
             questionMapper.updateCommentCount(question);
             //创建通知
-            createNotify(comment,question.getCreator(),NotificationTypeEnum.REPLY_QUESTION);
+            createNotify(comment,question.getCreator(),NotificationTypeEnum.REPLY_QUESTION,question.getId());
 
         } else {//回复评论
             Comment dbComment = commentMapper.findById(comment.getParentId());
@@ -60,14 +60,14 @@ public class CommentService {
             parentComment.setCommentCount(1);
             commentMapper.updateCommentCount(parentComment);
             //创建通知
-            createNotify(comment,dbComment.getCommentator(),NotificationTypeEnum.REPLY_COMMENT);
+            createNotify(comment,dbComment.getCommentator(),NotificationTypeEnum.REPLY_COMMENT,dbComment.getParentId());
         }
     }
-    private void createNotify(Comment comment,Long receiver,NotificationTypeEnum notificationTypeEnum){
+    private void createNotify(Comment comment,Long receiver,NotificationTypeEnum notificationTypeEnum,Long questionId){
         Notification notification=new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationTypeEnum.getType());
-        notification.setOuterId(comment.getParentId());
+        notification.setOuterId(questionId);
         notification.setNotifier(comment.getCommentator());
         notification.setReceiver(receiver);
         notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());

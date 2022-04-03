@@ -4,6 +4,7 @@ import com.su.community.pojo.Question;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface QuestionMapper {
@@ -26,4 +27,7 @@ public interface QuestionMapper {
     int updateCommentCount(Question question);
 
     List<Question> selectRelated(Question question);
+
+    List<Question> findByIds(List<Long> ids);
+
 }
