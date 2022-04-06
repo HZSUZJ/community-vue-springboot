@@ -14,7 +14,7 @@
     </select>
 
     <select id="count" resultType="int">
-        select count(1)
+        select count(*)
         from question
     </select>
 
@@ -26,7 +26,7 @@
     </select>
 
     <select id="countByUserId" resultType="int">
-        select count(1)
+        select count(*)
         from question
         where creator = #{userId}
     </select>
@@ -71,5 +71,24 @@
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
             #{id}
         </foreach>
+    </select>
+
+    <select id="countBySearch" parameterType="com.su.community.dto.QuestionQueryDTO" resultType="Integer">
+        select count(*) from question
+        <where>
+            <if test="search != null">
+                and title regexp #{search}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBySearch" parameterType="com.su.community.dto.QuestionQueryDTO" resultType="Question">
+        select * from question
+        <where>
+            <if test="search != null">
+                and title regexp #{search}
+            </if>
+        </where>
+        order by gmt_create desc  limit #{offset},#{size}
     </select>
 </mapper>

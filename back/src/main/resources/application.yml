@@ -28,11 +28,12 @@ spring:
     use-global-data-source-stat: true
     # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
     connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-
+  profiles:
+    active: dev
 
 
 mybatis:
   type-aliases-package: com.su.community.pojo
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath*:mybatis/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true

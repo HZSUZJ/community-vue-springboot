@@ -2,6 +2,7 @@ package com.su.community.service;
 
 import com.su.community.dto.PaginationDTO;
 import com.su.community.dto.QuestionDTO;
+import com.su.community.dto.QuestionQueryDTO;
 import com.su.community.mapper.QuestionMapper;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.Question;
@@ -9,6 +10,7 @@ import com.su.community.pojo.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +25,15 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO list(Integer page, Integer size) {
-        Integer totalCount = questionMapper.count();
+    public PaginationDTO list(String search,Integer page, Integer size) {
+        if(search!=null&&!"".equals(search)){
+            String[] tags=search.split(" ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+
+        }
+        QuestionQueryDTO questionQueryDTO=new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount = questionMapper.countBySearch(questionQueryDTO);
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setPagination(totalCount, page, size);
         if(page<1){
@@ -34,7 +43,10 @@ public class QuestionService {
             page=paginationDTO.getTotalPage();
         }
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.list(offset, size);
+        questionQueryDTO.setOffset(offset);
+        questionQueryDTO.setSize(size);
+        System.out.println(questionQueryDTO);
+        List<Question> questions = questionMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for (Question question : questions) {

@@ -1,5 +1,6 @@
 package com.su.community.mapper;
 
+import com.su.community.dto.QuestionQueryDTO;
 import com.su.community.pojo.Question;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -30,4 +31,7 @@ public interface QuestionMapper {
 
     List<Question> findByIds(List<Long> ids);
 
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
+
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }
