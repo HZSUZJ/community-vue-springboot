@@ -1,23 +1,32 @@
 <template>
-	<top-bar></top-bar>
-	<router-view #="{ Component }">
-		<keep-alive>
-			<component :is="Component"></component>
-		</keep-alive>
-	</router-view>
+  <div id="app">
+    <el-container>
+      <el-header>
+        <nav-menu></nav-menu>
+      </el-header>
+    </el-container>
+    <router-view/>
+  </div>
 </template>
-<script lang="ts">
-import { defineComponent } from "vue";
-import topBar from "@/components/common/topbar/topBar.vue";
 
-export default defineComponent({
-	name: "App",
-	components: {
-		topBar,
-	},
-	setup() {},
-});
+<script>
+import navMenu from "./components/NavMenu"
+
+
+export default {
+  name: 'App',
+  components: {
+    navMenu:navMenu
+  }
+}
 </script>
-<style lang="less" scoped>
-@import "@/assets/css/reset.css";
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
 </style>

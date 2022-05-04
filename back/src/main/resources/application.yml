@@ -31,9 +31,32 @@ spring:
   profiles:
     active: dev
 
+#
+#mybatis:
+#  type-aliases-package: com.su.community.pojo
+#  mapper-locations: classpath*:mybatis/mapper/*.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
 
-mybatis:
-  type-aliases-package: com.su.community.pojo
-  mapper-locations: classpath*:mybatis/mapper/*.xml
+
+mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+
+
+logging:
+  file:
+    name: back/logs/community.log
+  level:
+    root: info
+    com:
+      su:
+        community:
+          mapper: debug
+  logback:
+    rollingpolicy:
+      max-file-size: 200MB
+      max-history: 30
