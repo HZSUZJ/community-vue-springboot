@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1" id="b">版面列表</el-menu-item>
       <el-menu-item index="2">新帖</el-menu-item>
       <el-menu-item index="3">关注</el-menu-item>
@@ -44,10 +44,32 @@ export default {
     handleSelect(key, keyPath) {
       switch (key) {
         case '1':
-
+          this.$router.push({ path: '/boardList' })
+          break
+        case '2':
+          this.$router.push({ path: '/newTopics' })
+          break
+        case '3':
+          this.$router.push({ path: '/focus' })
+          break
+        case '5-1':
+          this.$router.push({ path: '/message' })
+          break
+        case '5-2':
+          this.$router.push({ path: '/message' })
+          break
+        case '5-3':
+          this.$router.push({ path: '/message' })
+          break
+        case '5-4':
+          this.$router.push({ path: '/message' })
+          break
+        case '6-1':
+          this.$router.push({ path: '/usercenter' })
+          break
 
       }
-      console.log(key, keyPath)
+      console.log(key)
     }
   }
 }
