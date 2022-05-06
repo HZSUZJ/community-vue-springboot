@@ -9,5 +9,6 @@ public interface TopicService {
     void creatTopic(Topic topic);
 
     List<TopicDTO> getAllTopic();
-    
+
+    TopicDTO getTopicById(Long id);
 }

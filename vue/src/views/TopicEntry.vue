@@ -41,9 +41,10 @@ export default {
   props: ['topic'],
   methods: {
     getTopicDetail(id) {
-      this.$router.push({
-        path: `/topic/${id}`,
-      })
+      let routeUrl = this.$router.resolve({
+        path: `/topic/${id}`
+      });
+      window.open(routeUrl.href, '_blank');
     }
   },
   filters: {

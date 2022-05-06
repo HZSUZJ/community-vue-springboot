@@ -43,4 +43,15 @@ public class TopicServiceImpl implements TopicService {
         }
         return topicDTOS;
     }
+
+    @Override
+    public TopicDTO getTopicById(Long id) {
+        Topic topic = topicMapper.selectById(id);
+        User user = userMapper.selectById(topic.getCreator());
+        TopicDTO topicDTO = new TopicDTO();
+        BeanUtils.copyProperties(topic, topicDTO);
+        topicDTO.setUser(user);
+        topicDTO.setBoard(BoardNameEnum.nameOfId(topic.getBoard()));
+        return topicDTO;
+    }
 }

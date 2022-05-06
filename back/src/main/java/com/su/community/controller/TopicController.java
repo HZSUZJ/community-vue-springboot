@@ -5,7 +5,7 @@ import com.su.community.dto.TopicDTO;
 import com.su.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -29,11 +29,15 @@ public class TopicController {
         return jsonObject.toJSONString();
     }
 
-    @GetMapping("/getTopicDetail")
-    public String getTopic(@RequestParam("id") Long topicId) {
-        
-
-        return null;
+    @GetMapping("/getTopicDetail/{id}")
+    public String getTopic(@PathVariable("id") Long topicId) {
+        TopicDTO topicDTO = topicService.getTopicById(topicId);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", topicDTO);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
     }
 
 
