@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
-import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -36,7 +33,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     public WebConfiguration(TokenInterceptor tokenInterceptor){
         this.tokenInterceptor = tokenInterceptor;
     }
-    
+
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer){
         configurer.setTaskExecutor(new ConcurrentTaskExecutor(Executors.newFixedThreadPool(3)));
@@ -48,16 +45,15 @@ public class WebConfiguration implements WebMvcConfigurer {
         List<String> excludePath = new ArrayList<>();
         //排除拦截，除了注册登录(此时还没token)，其他都拦截
 //        excludePath.add("/user/register");  //登录
+        excludePath.add("/upload/*");
         excludePath.add("/login");     //注册
         excludePath.add("/static/**");  //静态资源
         excludePath.add("/assets/**");  //静态资源
-
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludePath);
         WebMvcConfigurer.super.addInterceptors(registry);
     }
-
 
     //使用阿里 FastJson 作为JSON MessageConverter
     @Override

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class IndexController {
 
@@ -16,6 +18,7 @@ public class IndexController {
     public String index() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", "200");
+
         return jsonObject.toJSONString();
     }
 }

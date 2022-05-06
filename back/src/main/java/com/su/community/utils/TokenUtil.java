@@ -6,6 +6,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.su.community.pojo.User;
 
 import com.auth0.jwt.JWT;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public class TokenUtil {
@@ -38,13 +40,14 @@ public class TokenUtil {
      * @param token
      * @return
      */
-    public static boolean verify(String token){
+    public static boolean verify(String token, HttpServletRequest request){
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
             DecodedJWT jwt = verifier.verify(token);
             System.out.println("认证通过：");
             System.out.println("UID: " + jwt.getClaim("uId").asLong());
             System.out.println("过期时间：      " + jwt.getExpiresAt());
+            request.getSession().setAttribute("UID",jwt.getClaim("uId").asLong());
             return true;
         } catch (Exception e){
             return false;

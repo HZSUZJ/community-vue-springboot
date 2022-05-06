@@ -1,12 +1,12 @@
 <template>
   <div>
-<!--    <breadcrumb></breadcrumb>-->
+    <!--    <breadcrumb></breadcrumb>-->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Breadcrum from "../components/Breadcrumb"
+import Breadcrum from "./Breadcrumb"
 
 export default {
   name: 'Main',
