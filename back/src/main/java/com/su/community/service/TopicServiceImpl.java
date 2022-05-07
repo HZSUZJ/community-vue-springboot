@@ -2,7 +2,7 @@ package com.su.community.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.su.community.dto.TopicDTO;
-import com.su.community.enums.BoardNameEnum;
+import com.su.community.mapper.BoardMapper;
 import com.su.community.mapper.TopicMapper;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.Topic;
@@ -21,6 +21,8 @@ public class TopicServiceImpl implements TopicService {
     private TopicMapper topicMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private BoardMapper boardMapper;
 
     @Override
     public void creatTopic(Topic topic) {
@@ -37,7 +39,8 @@ public class TopicServiceImpl implements TopicService {
             User user = userMapper.selectById(topic.getCreator());
             TopicDTO topicDTO = new TopicDTO();
             BeanUtils.copyProperties(topic, topicDTO);
-            topicDTO.setBoard(BoardNameEnum.nameOfId(topic.getBoard()));
+            String boardName = boardMapper.selectById(topic.getBoard()).getName();
+            topicDTO.setBoard(boardName);
             topicDTO.setUser(user);
             topicDTOS.add(topicDTO);
         }
@@ -51,7 +54,8 @@ public class TopicServiceImpl implements TopicService {
         TopicDTO topicDTO = new TopicDTO();
         BeanUtils.copyProperties(topic, topicDTO);
         topicDTO.setUser(user);
-        topicDTO.setBoard(BoardNameEnum.nameOfId(topic.getBoard()));
+        String boardName = boardMapper.selectById(topic.getBoard()).getName();
+        topicDTO.setBoard(boardName);
         return topicDTO;
     }
 }
