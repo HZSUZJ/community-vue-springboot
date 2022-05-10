@@ -1,10 +1,7 @@
 <template>
   <div>
-    <el-row>
-      <el-col :span="6">
-        <div class="grid-content"></div>
-      </el-col>
-      <el-col :span="10">
+    <el-container>
+      <el-header>
         <div class="grid-content bg-purple-light">
           <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1" id="b">版面列表</el-menu-item>
@@ -34,50 +31,46 @@
             </el-submenu>
           </el-menu>
         </div>
-      </el-col>
-      <el-col :span="8">
-
-      </el-col>
-    </el-row>
-    <div class="line"></div>
+      </el-header>
+    </el-container>
   </div>
 </template>
 
 <script>
 
 export default {
-  name: "NavMenu",
-  data() {
+  name: 'NavMenu',
+  data () {
     return {
       input1: ''
-    };
+    }
   },
   methods: {
-    handleSelect(key, keyPath) {
+    handleSelect (key, keyPath) {
       switch (key) {
         case '1':
-          this.$router.push({ path: '/boardList' })
+          this.$router.push({path: '/boardList'})
           break
         case '2':
-          this.$router.push({ path: '/newTopics' })
+          this.$router.push({path: '/newTopics'})
           break
         case '3':
-          this.$router.push({ path: '/focus' })
+          this.$router.push({path: '/focus'})
           break
         case '5-1':
-          this.$router.push({ path: '/message' })
+          this.$router.push({path: '/message'})
           break
         case '5-2':
-          this.$router.push({ path: '/message' })
+          this.$router.push({path: '/message'})
           break
         case '5-3':
-          this.$router.push({ path: '/message' })
+          this.$router.push({path: '/message'})
           break
         case '5-4':
-          this.$router.push({ path: '/message' })
+          this.$router.push({path: '/message'})
           break
         case '6-1':
-          this.$router.push({ path: '/usercenter' })
+          this.$router.push({path: '/usercenter'})
           break
 
       }
@@ -89,8 +82,13 @@ export default {
 
 <style scoped>
 .bg-purple-light {
-  background: #e5e9f2;
+  margin: 0 auto;
+  /*background: #e5e9f2;*/
+  /*background-color: pink;*/
+
+  width: 750px;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;

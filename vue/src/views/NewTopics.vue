@@ -26,6 +26,9 @@
       </div>
     </div>
   </div>
+
+
+
 </template>
 
 <script>
@@ -53,7 +56,18 @@ export default {
   }
 }
 </script>
+
 <style scoped>
+
+.infinite-list-item {
+  list-style: none;
+  margin: 0 auto;
+  width: 1140px;
+  height: 80px;
+  margin-bottom: 80px;
+  border: 1px solid #79b8ca;
+}
+
 
 .grid-content {
   border-radius: 4px;

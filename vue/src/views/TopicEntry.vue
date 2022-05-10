@@ -1,7 +1,7 @@
 <template>
   <div>
     <a href="#" @click="getTopicDetail(topic.id)">
-      <el-row style="padding: 10px;border: 1px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
+      <el-row class=""style="padding: 10px;border: 1px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
         <el-col :span="6" style="background-color: #F2F6FC">
           <div class="grid-content">
             <el-container>
@@ -76,6 +76,7 @@ export default {
 </script>
 
 <style scoped>
+
 a {
   text-decoration: none;
   color: #333;
