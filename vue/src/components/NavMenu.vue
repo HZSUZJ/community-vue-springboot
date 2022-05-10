@@ -23,8 +23,8 @@
             </el-submenu>
             <el-submenu index="6">
               <template slot="title">
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                suzj
+                <el-avatar :src=uavatar></el-avatar>
+                {{ uname }}
               </template>
               <el-menu-item index="6-1">个人中心</el-menu-item>
               <el-menu-item index="6-2">注销</el-menu-item>
@@ -39,14 +39,20 @@
 <script>
 
 export default {
-  name: 'NavMenu',
-  data () {
+  name: "NavMenu",
+  data() {
     return {
-      input1: ''
-    }
+      input1: '',
+      uname: '',
+      uavatar: ''
+    };
+  },
+  created() {
+    this.uname = localStorage.username
+    this.uavatar = localStorage.uavatar
   },
   methods: {
-    handleSelect (key, keyPath) {
+    handleSelect(key, keyPath) {
       switch (key) {
         case '1':
           this.$router.push({path: '/boardList'})
@@ -83,9 +89,6 @@ export default {
 <style scoped>
 .bg-purple-light {
   margin: 0 auto;
-  /*background: #e5e9f2;*/
-  /*background-color: pink;*/
-
   width: 750px;
 }
 

@@ -53,6 +53,9 @@ export default {
                 message: '登录成功',
                 type: 'success'
               });
+              localStorage.username = res.data.username;
+              localStorage.uid = res.data.uid;
+              localStorage.uavatar = res.data.uavatar;
               this.$router.push('/');
             } else {
               this.$message.error('用户名或密码错误');
