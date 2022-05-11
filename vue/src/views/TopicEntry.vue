@@ -1,23 +1,21 @@
 <template>
-  <div>
+  <div class="mag_one">
     <a href="#" @click="getTopicDetail(topic.id)">
-      <el-row class=""style="padding: 10px;border: 1px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
-        <el-col :span="6" style="background-color: #F2F6FC">
+      <el-row >
+        <el-col :span="6">
           <div class="grid-content">
             <el-container>
-              <el-aside width="50px">
-                <el-avatar :src=topic.user.avatarUrl></el-avatar>
+              <el-aside width="80px" style="padding: 17px 15px;">
+                <el-avatar :src=topic.user.avatarUrl ></el-avatar>
               </el-aside>
-              <el-main>{{ topic.user.username }}</el-main>
+              <el-main style="height:80px; padding-left:10px; text-align: left">{{ topic.user.username }}</el-main>
             </el-container>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="grid-content">
-            <el-row style="text-align: left;padding-left: 15px">
-              {{ topic.title }}
-            </el-row>
-            <el-row style="text-align: left">
+            <el-row class="pinglun">{{ topic.title }}</el-row>
+            <el-row style="text-align: left; padding-left: 10px;">
               <i class="el-icon-time" style="margin-right: 10px">{{ topic.gmtCreate | formatDate }}</i>
               <i class="el-icon-view" style="margin-right: 10px">5</i>
               <span style="margin-right: 10px">最后回复：匿名</span>
@@ -25,8 +23,8 @@
             </el-row>
           </div>
         </el-col>
-        <el-col :span="4">
-          <div class="grid-content">
+        <el-col :span="4" style="float: right;">
+          <div class="grid-content msg_xy" style="margin-top: 20px; border-left: 1px solid #000">
             <span>{{ topic.board }}</span>
           </div>
         </el-col>
@@ -81,4 +79,30 @@ a {
   text-decoration: none;
   color: #333;
 }
+
+.mag_one {
+  /*width: 1140px;*/
+  height: 80px;
+  margin-bottom: 15px;
+  border: 1px solid #79b8ca;
+  /*background-color: pink;*/
+}
+
+.el-col-6 {
+  width: 180px;
+  height: 80px;
+  /*background-color: #F2F6FC;*/
+  background-color:  #79b8ca;
+}
+
+.grid-content {
+  line-height: 40px;
+}
+
+.pinglun {
+  text-align: left;
+  padding-left: 15px;
+}
+
+
 </style>
