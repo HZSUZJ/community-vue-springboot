@@ -1,4 +1,4 @@
-package com.su.community.service;
+package com.su.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.su.community.dto.TopicDTO;
@@ -7,6 +7,7 @@ import com.su.community.mapper.TopicMapper;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.Topic;
 import com.su.community.pojo.User;
+import com.su.community.service.TopicService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

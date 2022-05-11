@@ -1,7 +1,8 @@
-package com.su.community.service;
+package com.su.community.service.impl;
 
 import com.su.community.mapper.BoardMapper;
 import com.su.community.pojo.Board;
+import com.su.community.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

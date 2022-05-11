@@ -89,7 +89,7 @@ export default {
 <style scoped>
 .bg-purple-light {
   margin: 0 auto;
-  width: 750px;
+  width: 800px;
 }
 
 .grid-content {

@@ -30,16 +30,32 @@
                   </div>
                 </el-col>
               </el-row>
+              <el-pagination style="float: right"
+                             background
+                             layout="prev, pager, next"
+                             :page-size="10"
+                             :current-page=currentPage
+                             :total=total
+                             @current-change="changePage">
+              </el-pagination>
               <!--              内容区-->
-              <commentEntry :comment="topic"></commentEntry>
+              <commentEntry v-if="currentPage==1" :comment="topic"></commentEntry>
               <!--              评论区-->
+              <commentEntry v-for="comment in comments" :comment="comment"></commentEntry>
 
-
+              <!--              分页-->
+              <el-pagination style="float: right"
+                             background
+                             layout="prev, pager, next"
+                             :page-size="10"
+                             :current-page=currentPage
+                             :total=total
+                             @current-change="changePage">
+              </el-pagination>
               <!--              写评论区-->
 
-              <v-md-editor v-model="comment" height="100%" :disabled-menus="[]"
+              <v-md-editor v-model="content" height="100%" :disabled-menus="[]"
                            @upload-image="onUploadImage"></v-md-editor>
-
               <el-button type="primary" @click="onSubmit">回复</el-button>
             </div>
           </el-col>
@@ -62,16 +78,30 @@ export default {
   data() {
     return {
       topic: '',
-      comment: ''
+      content: '',
+      comments: '',
+      total: '',
+      currentPage: '1'
     }
   },
   methods: {
+    changePage(val) {
+      this.currentPage = val
+      this.axios.get(`/getAllComment/${this.topic.id}/${val}`).then(res => {
+        if (res.data.code === 200) {
+          this.comments = res.data.data
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
+
+    },
     onUploadImage(event, insertImage, files) {
       const file = files[0]
       let param = new FormData()
       param.append('file', file)
       this.axios.post(`/uploadFile`, param).then(r => {
-        if (r.data.code == 200) {
+        if (r.data.code === 200) {
           insertImage({
             url: r.data.url,
             desc: files[0].name
@@ -83,16 +113,22 @@ export default {
     },
     onSubmit() {
       let param = new FormData()
-      param.append("title", this.form.title)
-      param.append("content", this.form.content)
-      param.append("notify", this.form.delivery)
-      param.append("board", 1)
-      this.axios.post(`/publish`, param).then(res => {
-        if (res.data.code == 200) {
-          alert("发表成功")
+      param.append("topicId", this.topic.id)
+      param.append("parentId", 0)
+      param.append("content", this.content)
+      this.axios.post(`/postComment`, param).then(res => {
+        if (res.data.code === 200) {
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          });
+          const that = this;
+          setTimeout(function () {
+            that.$router.go(0)
+          }, 1000)
         }
       }).catch(e => {
-        alert('发表失败')
+        alert('评论失败')
       })
     }
   },
@@ -101,12 +137,29 @@ export default {
     param.append("id", this.$route.params.id)
     this.axios.get(`/getTopicDetail/${this.$route.params.id}`).then(res => {
       if (res.data.code === 200) {
-        console.log(res.data.data)
         this.topic = res.data.data
       }
     }).catch(e => {
       alert('服务器故障')
     })
+
+    this.axios.get(`/getAllComment/${this.$route.params.id}/1`).then(res => {
+      if (res.data.code === 200) {
+        this.comments = res.data.data
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
+
+    this.axios.get(`/getCommentTotalCount/${this.$route.params.id}`).then(res => {
+      if (res.data.code === 200) {
+        this.total = res.data.total
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
+
+
   },
   components: {
     commentEntry: commentEntry

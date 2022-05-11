@@ -1,57 +1,60 @@
-//package com.su.community.controller;
-//
-//import com.su.community.dto.CommentCreateDTO;
-//import com.su.community.dto.CommentDTO;
-//import com.su.community.dto.ResultDTO;
-//import com.su.community.pojo.Comment;
-//import com.su.community.pojo.User;
-//import com.su.community.service.CommentService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//
-//@RestController
-//public class CommentController {
-//
-//    @Autowired
-//    private CommentService commentService;
-//
-//    @RequestMapping(value = "/comment", method = RequestMethod.POST)
-//    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
-//                       HttpServletRequest request) {
-//
-//        User user = (User) request.getSession().getAttribute("user");
-//        if (user == null) {
-//            return ResultDTO.errorOf(2003, "未登录不能进行评论，请先登录");
-//        }
-//        if (commentCreateDTO.getContent() == null || "".equals(commentCreateDTO.getContent())) {
-//            return ResultDTO.errorOf(2004, "回复不能为空");
-//        }
-//        Comment comment = new Comment();
-//        comment.setParentId(commentCreateDTO.getParentId());
-//        comment.setContent(commentCreateDTO.getContent());
-//        comment.setType(commentCreateDTO.getType());
-//        comment.setGmtCreate(System.currentTimeMillis());
-//        comment.setGmtModified(System.currentTimeMillis());
-//        comment.setCommentator(user.getId());
-//        comment.setContent(commentCreateDTO.getContent());
-//        commentService.insert(comment);
-//        Map<Object, Object> objectObjectMap = new HashMap<>();
-//        objectObjectMap.put("message", "成功");
-//        objectObjectMap.put("code", "200");
-//        return objectObjectMap;
-//    }
-//
-//    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
-//    public ResultDTO<List> comments(@PathVariable(name = "id") Long id) {
-//        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, 2);
-//        return ResultDTO.okOf(commentDTOS);
-//    }
-//
-//
-//}
+package com.su.community.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.su.community.dto.CommentDTO;
+import com.su.community.pojo.Comment;
+import com.su.community.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+
+
+@RestController
+public class CommentController {
+    @Autowired
+    private CommentService commentService;
+
+    @PostMapping("/postComment")
+    public String postComment(Long topicId, Long parentId, String content, HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        Comment comment = new Comment();
+        comment.setTopicId(topicId);
+        comment.setParentId(parentId);
+        comment.setContent(content);
+        comment.setCommentator(uid);
+        commentService.createComment(comment);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
+    @GetMapping("/getAllComment/{topicId}/{current}")
+    public String getAllComment(@PathVariable("topicId") Long topicId, @PathVariable("current") Integer current) {
+        System.out.println(current);
+        List<CommentDTO> commentDTOS = commentService.getCommentByPage(topicId, current);
+        HashMap<String, Object> map = new HashMap<>();
+        JSONObject jsonObject = new JSONObject();
+        map.put("code", 200);
+        map.put("data", commentDTOS);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
+    @GetMapping("/getCommentTotalCount/{topicId}")
+    public String getCommentTotalCount(@PathVariable("topicId") Long topicId) {
+        HashMap<String, Object> map = new HashMap<>();
+        JSONObject jsonObject = new JSONObject();
+        map.put("code", 200);
+        map.put("total", commentService.getTotalCountByTopicId(topicId));
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+}

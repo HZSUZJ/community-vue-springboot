@@ -14,7 +14,6 @@ import VMdPreview from '@kangc/v-md-editor/lib/preview';
 import '@kangc/v-md-editor/lib/style/preview.css';
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
-import store from './store'
 // highlightjs
 import hljs from 'highlight.js';
 
@@ -55,7 +54,6 @@ axios.interceptors.response.use(res => {
 new Vue({
   el: '#app',
   router,
-  store,
   components: {App},
   template: '<App/>',
   render: h => h(App)
