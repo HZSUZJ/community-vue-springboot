@@ -14,7 +14,7 @@ import VMdPreview from '@kangc/v-md-editor/lib/preview';
 import '@kangc/v-md-editor/lib/style/preview.css';
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
-
+import store from './store'
 // highlightjs
 import hljs from 'highlight.js';
 
@@ -31,7 +31,8 @@ Vue.use(VueMarkdownEditor);
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = "http://10.12.11.142:8081"
+// axios.defaults.baseURL = "http://10.12.11.142:8081"
+axios.defaults.baseURL = "http://localhost:8081"
 Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 /* eslint-disable no-new */
@@ -45,7 +46,7 @@ axios.interceptors.request.use(config => {
 //假设token过期
 axios.interceptors.response.use(res => {
   let data = res.data
-  if (res.data.code == 50000) {
+  if (res.data.code === 50000) {
     localStorage.removeItem('token')
   }
   return data
@@ -54,6 +55,7 @@ axios.interceptors.response.use(res => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: {App},
   template: '<App/>',
   render: h => h(App)

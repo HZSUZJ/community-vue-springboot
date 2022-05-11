@@ -34,6 +34,13 @@
               <commentEntry :comment="topic"></commentEntry>
               <!--              评论区-->
 
+
+              <!--              写评论区-->
+
+              <v-md-editor v-model="comment" height="100%" :disabled-menus="[]"
+                           @upload-image="onUploadImage"></v-md-editor>
+
+              <el-button type="primary" @click="onSubmit">回复</el-button>
             </div>
           </el-col>
 
@@ -54,7 +61,39 @@ export default {
   name: "TopicDetail",
   data() {
     return {
-      topic: ''
+      topic: '',
+      comment: ''
+    }
+  },
+  methods: {
+    onUploadImage(event, insertImage, files) {
+      const file = files[0]
+      let param = new FormData()
+      param.append('file', file)
+      this.axios.post(`/uploadFile`, param).then(r => {
+        if (r.data.code == 200) {
+          insertImage({
+            url: r.data.url,
+            desc: files[0].name
+          })
+        }
+      }).catch(e => {
+        alert('图片上传出了点小问题，请稍后重试')
+      })
+    },
+    onSubmit() {
+      let param = new FormData()
+      param.append("title", this.form.title)
+      param.append("content", this.form.content)
+      param.append("notify", this.form.delivery)
+      param.append("board", 1)
+      this.axios.post(`/publish`, param).then(res => {
+        if (res.data.code == 200) {
+          alert("发表成功")
+        }
+      }).catch(e => {
+        alert('发表失败')
+      })
     }
   },
   created() {
