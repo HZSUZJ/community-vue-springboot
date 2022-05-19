@@ -24,6 +24,7 @@ import MyFollowings from "../views/usercenter/MyFollowings";
 import MyFans from "../views/usercenter/MyFans";
 import PostTopic from "../views/PostTopic";
 import TopicDetail from '../views/TopicDetail'
+import BoardDetail from '../views/BoardDetail'
 
 Vue.use(Router)
 const router = new Router({
@@ -154,6 +155,11 @@ const router = new Router({
       path: '/topic/:id',
       name: 'TopicDetail',
       component: TopicDetail
+    },
+    {
+      path: '/board',
+      name: 'BoardDetail',
+      component: BoardDetail
     },
     {
       path: '/gohome',

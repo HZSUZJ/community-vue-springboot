@@ -23,12 +23,15 @@
               <el-row class="el-row-tiezi">
                 <el-col :span="12">
                   <div class="grid-content">
-                    <el-row style="height: 40px;line-height: 40px;text-align: left;padding-left: 15px; margin-bottom: 5px">
+                    <el-row
+                      style="height: 40px;line-height: 40px;text-align: left;padding-left: 15px; margin-bottom: 5px">
                       {{ topic.title }}
                     </el-row>
                     <el-row style="text-align: left">
-                      <i class="el-icon-time" style="margin-right: 10px; color: #79b8ca">{{ topic.gmtCreate | formatDate }}</i>
-                      <i class="el-icon-view" style="margin-right: 10px; color: #79b8ca">5</i>
+                      <i class="el-icon-time" style="margin-right: 10px; color: #79b8ca">{{
+                          topic.gmtCreate | formatDate
+                        }}</i>
+                      <i class="el-icon-view" style="margin-right: 10px; color: #79b8ca">{{ topic.views }}</i>
                     </el-row>
                   </div>
                 </el-col>
@@ -75,7 +78,7 @@ import commentEntry from './CommentEntry'
 
 export default {
   name: 'TopicDetail',
-  data () {
+  data() {
     return {
       topic: '',
       content: '',
@@ -85,7 +88,7 @@ export default {
     }
   },
   methods: {
-    changePage (val) {
+    changePage(val) {
       this.currentPage = val
       this.axios.get(`/getAllComment/${this.topic.id}/${val}`).then(res => {
         if (res.data.code === 200) {
@@ -95,7 +98,7 @@ export default {
         alert('服务器故障')
       })
     },
-    onUploadImage (event, insertImage, files) {
+    onUploadImage(event, insertImage, files) {
       const file = files[0]
       let param = new FormData()
       param.append('file', file)
@@ -110,7 +113,7 @@ export default {
         alert('图片上传出了点小问题，请稍后重试')
       })
     },
-    onSubmit () {
+    onSubmit() {
       let param = new FormData()
       param.append('topicId', this.topic.id)
       param.append('parentId', 0)
@@ -131,7 +134,7 @@ export default {
       })
     }
   },
-  created () {
+  created() {
     let param = new FormData()
     param.append('id', this.$route.params.id)
     this.axios.get(`/getTopicDetail/${this.$route.params.id}`).then(res => {
@@ -157,6 +160,13 @@ export default {
     }).catch(e => {
       alert('服务器故障')
     })
+
+    this.axios.get(`/addViews/${this.$route.params.id}`).then(res => {
+
+    }).catch(e => {
+      alert('服务器故障')
+    })
+
   },
   components: {
     commentEntry: commentEntry
@@ -166,7 +176,9 @@ export default {
       let curdate = new Date().getTime()
       let dffdate = (curdate - value) / 1000 / 60
       if (dffdate < 60) {
-        if (parseInt(dffdate) === 0) { return '刚刚' }
+        if (parseInt(dffdate) === 0) {
+          return '刚刚'
+        }
         return parseInt(dffdate) + '分钟前'
       }
       let date = new Date(value)
