@@ -4,7 +4,7 @@
       <div class="el-row">
 
       </div>
-      <div id="tp-area">
+      <div id="tp-area" style="margin-top: 20px">
         <el-row>
           <el-col :span="6">
             <div class="grid-content bg-purple"></div>

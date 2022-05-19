@@ -5,7 +5,7 @@
         <el-col :span="6">
           <div class="grid-content">
             <el-container>
-              <el-aside width="80px" style="padding: 17px 15px;">
+              <el-aside  width="80px" style="padding: 17px 15px;">
                 <el-avatar :src=topic.user.avatarUrl ></el-avatar>
               </el-aside>
               <el-main style="height:80px; padding-left:10px; text-align: left">{{ topic.user.username }}</el-main>

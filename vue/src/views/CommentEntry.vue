@@ -69,14 +69,6 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
 
-.el-col-7 {
-  width: 274px;
-  /*background-color: #F2F6FC;*/
-  background-color: #79b8ca;
-  /*background-color: pink;*/
-
-}
-
 button {
   background-color: #79b8ca;
   color: #fff;
