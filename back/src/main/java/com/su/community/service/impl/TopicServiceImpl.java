@@ -6,8 +6,10 @@ import com.su.community.mapper.BoardMapper;
 import com.su.community.mapper.TopicMapper;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.Topic;
+import com.su.community.pojo.TopicStatistic;
 import com.su.community.pojo.User;
 import com.su.community.service.TopicService;
+import com.su.community.service.TopicStatisticService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,10 +26,15 @@ public class TopicServiceImpl implements TopicService {
     private UserMapper userMapper;
     @Autowired
     private BoardMapper boardMapper;
+    @Autowired
+    private TopicStatisticService topicStatisticService;
 
     @Override
     public void creatTopic(Topic topic) {
         topicMapper.insert(topic);
+        TopicStatistic topicStatistic = new TopicStatistic();
+        topicStatistic.setTopicId(topic.getId());
+        topicStatisticService.creatTopicStatistic(topicStatistic);
     }
 
     @Override
@@ -43,6 +50,11 @@ public class TopicServiceImpl implements TopicService {
             String boardName = boardMapper.selectById(topic.getBoard()).getName();
             topicDTO.setBoard(boardName);
             topicDTO.setUser(user);
+            TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicDTO.getId());
+            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setLikeCount(topicStatistic.getLikeCount());
+            topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
+            topicDTO.setCommentCount(topicStatistic.getCommentCount());
             topicDTOS.add(topicDTO);
         }
         return topicDTOS;
@@ -55,6 +67,11 @@ public class TopicServiceImpl implements TopicService {
         TopicDTO topicDTO = new TopicDTO();
         BeanUtils.copyProperties(topic, topicDTO);
         topicDTO.setUser(user);
+        TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(id);
+        topicDTO.setViews(topicStatistic.getViews());
+        topicDTO.setLikeCount(topicStatistic.getLikeCount());
+        topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
+        topicDTO.setCommentCount(topicStatistic.getCommentCount());
         String boardName = boardMapper.selectById(topic.getBoard()).getName();
         topicDTO.setBoard(boardName);
         return topicDTO;

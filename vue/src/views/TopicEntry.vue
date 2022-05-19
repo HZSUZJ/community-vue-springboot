@@ -1,12 +1,12 @@
 <template>
   <div class="mag_one">
     <a href="#" @click="getTopicDetail(topic.id)">
-      <el-row >
+      <el-row>
         <el-col :span="6">
           <div class="grid-content">
             <el-container>
               <el-aside width="80px" style="padding: 17px 15px;">
-                <el-avatar :src=topic.user.avatarUrl ></el-avatar>
+                <el-avatar :src=topic.user.avatarUrl></el-avatar>
               </el-aside>
               <el-main style="height:80px; padding-left:10px; text-align: left">{{ topic.user.username }}</el-main>
             </el-container>
@@ -17,7 +17,7 @@
             <el-row class="pinglun">{{ topic.title }}</el-row>
             <el-row style="text-align: left; padding-left: 10px;">
               <i class="el-icon-time" style="margin-right: 10px">{{ topic.gmtCreate | formatDate }}</i>
-              <i class="el-icon-view" style="margin-right: 10px">5</i>
+              <i class="el-icon-view" style="margin-right: 10px">{{ topic.views }}</i>
               <span style="margin-right: 10px">最后回复：匿名</span>
               <span style="margin-right: 10px">5分钟前</span>
             </el-row>
@@ -92,7 +92,7 @@ a {
   width: 180px;
   height: 80px;
   /*background-color: #F2F6FC;*/
-  background-color:  #79b8ca;
+  background-color: #79b8ca;
 }
 
 .grid-content {

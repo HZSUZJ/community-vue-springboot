@@ -1,7 +1,6 @@
 package com.su.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +21,10 @@ public class UploadController {
     public String upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
         String originName = file.getOriginalFilename();
         //判断类型
-        String realPath = ResourceUtils.getURL("classpath:").getPath().replaceAll("%20", " ") + "static/upload/";
+        //linux下 然后在WebConfiguration配置映射
+        String realPath = "/data/suzj/springboot/image/";
+        //win下
+//        String realPath = ResourceUtils.getURL("classpath:").getPath().replaceAll("%20", " ") + "static/upload/";
         String newName = UUID.randomUUID().toString() + originName;
         String filePath = realPath + newName;
         File folder = new File(realPath);
