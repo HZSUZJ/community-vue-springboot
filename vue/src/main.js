@@ -30,8 +30,8 @@ Vue.use(VueMarkdownEditor);
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = "http://10.12.11.142:8081"
-// axios.defaults.baseURL = "http://localhost:8081"
+// axios.defaults.baseURL = "http://10.12.11.142:8081"
+axios.defaults.baseURL = "http://localhost:8081"
 Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 /* eslint-disable no-new */

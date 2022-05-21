@@ -10,5 +10,5 @@ public interface TopicService {
 
     List<TopicDTO> getAllTopic();
 
-    TopicDTO getTopicById(Long id);
+    TopicDTO getTopicById(Long topicId, Long uid);
 }

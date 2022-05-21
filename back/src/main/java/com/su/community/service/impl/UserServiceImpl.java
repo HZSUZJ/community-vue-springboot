@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     public boolean findByToken(String token) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("token", token);
-
         return true;
     }
 

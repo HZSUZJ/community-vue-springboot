@@ -32,6 +32,12 @@
                           topic.gmtCreate | formatDate
                         }}</i>
                       <i class="el-icon-view" style="margin-right: 10px; color: #79b8ca">{{ topic.views }}</i>
+
+
+                      <el-button type="primary" round v-if="topic.isCollection===false" @click="doCollection">收藏
+                      </el-button>
+                      <el-button type="primary" round v-if="topic.isCollection===true" @click="doCancelCollection">已收藏
+                      </el-button>
                     </el-row>
                   </div>
                 </el-col>
@@ -121,7 +127,7 @@ export default {
       this.axios.post(`/postComment`, param).then(res => {
         if (res.data.code === 200) {
           this.$message({
-            message: '登录成功',
+            message: '评论成功',
             type: 'success'
           })
           const that = this
@@ -131,6 +137,24 @@ export default {
         }
       }).catch(e => {
         alert('评论失败')
+      })
+    },
+    doCollection() {
+      this.axios.get(`/addCollection/${this.topic.id}`).then(res => {
+        if (res.data.code === 200) {
+          this.topic.isCollection = true
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
+    },
+    doCancelCollection() {
+      this.axios.get(`/deleteCollection/${this.topic.id}`).then(res => {
+        if (res.data.code === 200) {
+          this.topic.isCollection = false
+        }
+      }).catch(e => {
+        alert('服务器故障')
       })
     }
   },
@@ -219,5 +243,6 @@ export default {
   margin-top: 11px;
   border-left: 1px solid #333333;
 }
+
 
 </style>

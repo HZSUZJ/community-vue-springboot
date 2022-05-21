@@ -3,8 +3,10 @@ package com.su.community.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.su.community.dto.TopicDTO;
 import com.su.community.mapper.BoardMapper;
+import com.su.community.mapper.CollectionMapper;
 import com.su.community.mapper.TopicMapper;
 import com.su.community.mapper.UserMapper;
+import com.su.community.pojo.Collection;
 import com.su.community.pojo.Topic;
 import com.su.community.pojo.TopicStatistic;
 import com.su.community.pojo.User;
@@ -28,6 +30,8 @@ public class TopicServiceImpl implements TopicService {
     private BoardMapper boardMapper;
     @Autowired
     private TopicStatisticService topicStatisticService;
+    @Autowired
+    private CollectionMapper collectionMapper;
 
     @Override
     public void creatTopic(Topic topic) {
@@ -61,17 +65,23 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public TopicDTO getTopicById(Long id) {
-        Topic topic = topicMapper.selectById(id);
+    public TopicDTO getTopicById(Long topicId, Long uid) {
+        Topic topic = topicMapper.selectById(topicId);
         User user = userMapper.selectById(topic.getCreator());
         TopicDTO topicDTO = new TopicDTO();
         BeanUtils.copyProperties(topic, topicDTO);
         topicDTO.setUser(user);
-        TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(id);
+        TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicId);
         topicDTO.setViews(topicStatistic.getViews());
         topicDTO.setLikeCount(topicStatistic.getLikeCount());
         topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
         topicDTO.setCommentCount(topicStatistic.getCommentCount());
+
+        QueryWrapper<Collection> wrapper = new QueryWrapper<>();
+        wrapper.eq("topic_id", topicId).eq("user_id", uid);
+        Collection collection = collectionMapper.selectOne(wrapper);
+        topicDTO.setIsCollection(collection != null);
+        
         String boardName = boardMapper.selectById(topic.getBoard()).getName();
         topicDTO.setBoard(boardName);
         return topicDTO;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,9 +30,11 @@ public class TopicController {
         return jsonObject.toJSONString();
     }
 
-    @GetMapping("/getTopicDetail/{id}")
-    public String getTopic(@PathVariable("id") Long topicId) {
-        TopicDTO topicDTO = topicService.getTopicById(topicId);
+    @GetMapping("/getTopicDetail/{topicId}")
+    public String getTopic(@PathVariable("topicId") Long topicId, HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        TopicDTO topicDTO = topicService.getTopicById(topicId, uid);
+
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -39,6 +42,6 @@ public class TopicController {
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
     }
-    
+
 
 }
