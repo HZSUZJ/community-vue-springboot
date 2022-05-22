@@ -37,9 +37,9 @@ public class CommentController {
     }
 
     @GetMapping("/getAllComment/{topicId}/{current}")
-    public String getAllComment(@PathVariable("topicId") Long topicId, @PathVariable("current") Integer current) {
-        System.out.println(current);
-        List<CommentDTO> commentDTOS = commentService.getCommentByPage(topicId, current);
+    public String getAllComment(@PathVariable("topicId") Long topicId, @PathVariable("current") Integer current, HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        List<CommentDTO> commentDTOS = commentService.getCommentByPage(topicId, current, uid);
         HashMap<String, Object> map = new HashMap<>();
         JSONObject jsonObject = new JSONObject();
         map.put("code", 200);

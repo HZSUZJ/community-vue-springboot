@@ -1,16 +1,7 @@
 <template>
   <div>
     <div id="nt-root" style="margin-top: 15px">
-      <div class="el-row-fenye" style="width: 965px; margin:0 auto;">
-        <el-pagination style="display:block; float: right"
-                       background
-                       layout="prev, pager, next"
-                       :page-size="10"
-                       :current-page=currentPage
-                       :total=total
-                       @current-change="changePage">
-        </el-pagination>
-      </div>
+
       <div id="tp-area">
         <el-row>
           <el-col :span="6">
@@ -19,6 +10,17 @@
           <!--          帖子标题-->
           <el-col :span="12">
             <div class="grid-content">
+              <!--              分页-->
+              <el-row>
+                <el-pagination style="float: right"
+                               background
+                               layout="prev, pager, next"
+                               :page-size="10"
+                               :current-page=currentPage
+                               :total=total
+                               @current-change="changePage">
+                </el-pagination>
+              </el-row>
 
               <el-row class="el-row-tiezi">
                 <el-col :span="12">
@@ -47,9 +49,7 @@
                   </div>
                 </el-col>
               </el-row>
-
-              <!--              内容区-->
-              <commentEntry v-if="currentPage==1" :comment="topic"></commentEntry>
+              <commentEntry :comment="topic" v-if="currentPage==='1'"></commentEntry>
               <!--              评论区-->
               <commentEntry v-for="comment in comments" :comment="comment"></commentEntry>
 
@@ -95,7 +95,8 @@ export default {
   },
   methods: {
     changePage(val) {
-      this.currentPage = val
+      this.currentPage = val.toString()
+      console.log(this.currentPage)
       this.axios.get(`/getAllComment/${this.topic.id}/${val}`).then(res => {
         if (res.data.code === 200) {
           this.comments = res.data.data
@@ -164,6 +165,7 @@ export default {
     this.axios.get(`/getTopicDetail/${this.$route.params.id}`).then(res => {
       if (res.data.code === 200) {
         this.topic = res.data.data
+        console.log(this.topic)
       }
     }).catch(e => {
       alert('服务器故障')

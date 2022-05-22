@@ -14,5 +14,7 @@ public class CommentDTO {
     private Long dislikeCount;
     private Long gmtCreate;
     private Long gmtModified;
+    private Boolean isFollowee;
+    private Boolean isMine;
     private User user;
 }

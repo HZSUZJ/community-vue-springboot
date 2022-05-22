@@ -16,6 +16,8 @@ public class TopicDTO {
     private Integer dislikeCount;
     private Integer commentCount;
     private Boolean isCollection;
+    private Boolean isFollowee;
+    private Boolean isMine;
     private Long gmtCreate;
     private Long gmtModified;
     private User user;

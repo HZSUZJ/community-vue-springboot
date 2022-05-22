@@ -9,13 +9,22 @@
             </div>
             <div class="userMessage-right" style="float:right; width: 94px; padding-right: 10px;">
               <el-avatar :src=comment.user.avatarUrl></el-avatar>
-              <div class="userMessageBtn" style="margin-top: 20px">
-                <a href="#"><button class="replierBtn" id="follow" style="float: left">关注</button></a>
-                <a href="#"><button class="replierBtn" style="float: right">私信</button></a>
+              <div class="userMessageBtn" style="margin-top: 20px" v-if="comment.isMine===false">
+                <a href="#">
+                  <button class="replierBtn" style="float: left" v-if="comment.isFollowee===true"
+                          @click="doCancelFollow(`${comment.user.id}`)">取关
+                  </button>
+                  <button class="replierBtn" style="float: left" v-if="comment.isFollowee===false"
+                          @click="doFollow(`${comment.user.id}`)">关注
+                  </button>
+                </a>
+
+                <!--                <a href="#">-->
+                <!--                  <button class="replierBtn" style="float: right">私信</button>-->
+                <!--                </a>-->
               </div>
             </div>
           </div>
-                <!--              <el-avatar :src=comment.user.avatarUrl></el-avatar>-->
         </el-aside>
 
         <el-main :src=comment.user.avatarUrl>
@@ -40,7 +49,9 @@ export default {
       let curdate = new Date().getTime()
       let dffdate = (curdate - value) / 1000 / 60
       if (dffdate < 60) {
-        if (parseInt(dffdate) === 0) { return '刚刚' }
+        if (parseInt(dffdate) === 0) {
+          return '刚刚'
+        }
         return parseInt(dffdate) + '分钟前'
       }
       let date = new Date(value)
@@ -57,7 +68,28 @@ export default {
       s = s < 10 ? ('0' + s) : s
       return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s
     }
+  },
+  methods: {
+    doFollow(id) {
+      this.axios.get(`/addFollow/${id}`).then(res => {
+        if (res.data.code === 200) {
+          this.comment.isFollowee = true
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
+    },
+    doCancelFollow(id) {
+      this.axios.get(`/deleteFollow/${id}`).then(res => {
+        if (res.data.code === 200) {
+          this.comment.isFollowee = false
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
+    }
   }
+
 }
 </script>
 

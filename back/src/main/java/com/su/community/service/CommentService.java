@@ -8,8 +8,9 @@ import java.util.List;
 public interface CommentService {
     void createComment(Comment comment);
 
-    List<CommentDTO> getCommentByPage(Long topicId, Integer current);
+    List<CommentDTO> getCommentByPage(Long topicId, Integer current, Long userId);
 
     Long getTotalCountByTopicId(Long topicId);
+
 
 }
