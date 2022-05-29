@@ -157,7 +157,7 @@ const router = new Router({
       component: TopicDetail
     },
     {
-      path: '/board',
+      path: '/board/:id',
       name: 'BoardDetail',
       component: BoardDetail
     },

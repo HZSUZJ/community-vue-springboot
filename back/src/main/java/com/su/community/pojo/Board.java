@@ -9,6 +9,7 @@ public class Board {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     private String name;
+    private String description;
     private Long postCount;
     private Long todayCount;
 }

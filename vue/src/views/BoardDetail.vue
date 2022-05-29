@@ -12,8 +12,8 @@
           <el-col :span="12">
             <div class="grid-content">
               <el-container>
-                <el-header>版面介绍</el-header>
-                <el-main>一堆文字</el-main>
+                <el-header>{{ board.name }}</el-header>
+                <el-main>{{ board.description }}</el-main>
               </el-container>
               <el-button type="primary">发主题</el-button>
 
@@ -27,7 +27,7 @@
                     :current-page.sync="currentPage"
                     :page-size="20"
                     layout="prev, pager, next, jumper"
-                    :total="1000">
+                    :total="total">
                   </el-pagination>
                 </div>
               </el-row>
@@ -43,7 +43,7 @@
                     width="180">
                   </el-table-column>
                   <el-table-column
-                    prop="author"
+                    prop="user.username"
                     label="作者"
                     width="180">
                   </el-table-column>
@@ -53,7 +53,7 @@
                     width="180">
                   </el-table-column>
                   <el-table-column
-                    prop="replyCount"
+                    prop="commentCount"
                     label="回复"
                     width="180">
                   </el-table-column>
@@ -73,7 +73,7 @@
                     :current-page.sync="currentPage"
                     :page-size="20"
                     layout="prev, pager, next, jumper"
-                    :total="1000">
+                    :total="total">
                   </el-pagination>
                 </div>
               </el-row>
@@ -109,13 +109,24 @@ export default {
   },
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-      }],
+      tableData: [{}],
       currentPage: 1,
+      board: '',
+      topics: '',
+      total: ''
     }
+  },
+  created() {
+    this.axios.get(`/board/${this.$route.params.id}`).then(res => {
+      if (res.data.code === 200) {
+        this.board = res.data.data
+        this.tableData = this.board.topics
+        this.total = this.tableData.length
+        console.log(this.total)
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
   }
 }
 </script>
