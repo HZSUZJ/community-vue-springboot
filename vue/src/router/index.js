@@ -5,7 +5,7 @@ import Login from '../views/Login'
 import NotFound from '../views/NotFound'
 import BoardList from "../views/BoardList"
 import NewTopics from "../views/NewTopics"
-import Focus from "../views/Focus"
+import Focus from "../views/focus/Focus"
 import Board from "../views/focus/Board";
 import User from "../views/focus/User";
 import Favorite from "../views/focus/Favorite";

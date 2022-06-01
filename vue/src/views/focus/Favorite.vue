@@ -1,12 +1,30 @@
 <template>
-  <h1>
-    收藏更新
-  </h1>
+  <div>
+    <topicEntry v-for="topic in topics" :topic="topic"></topicEntry>
+  </div>
 </template>
 
 <script>
+import topicEntry from '../TopicEntry'
+
 export default {
-  name: "Favorite"
+  name: "Favorite",
+  data() {
+    return {
+      topics: ''
+    }
+  },
+  created() {
+    this.axios.get(`/focus/favorite`).then(res => {
+      if (res.data.code === 200) {
+        this.topics = res.data.data
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
+  }, components: {
+    topicEntry: topicEntry
+  }
 }
 </script>
 
