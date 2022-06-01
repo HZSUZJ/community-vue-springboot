@@ -147,7 +147,7 @@ const router = new Router({
       ]
     },
     {
-      path: '/postTopic',
+      path: '/postTopic/:id',
       name: 'PostTopic',
       component: PostTopic
     },

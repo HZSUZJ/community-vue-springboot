@@ -65,9 +65,9 @@ export default {
       param.append("title", this.form.title)
       param.append("content", this.form.content)
       param.append("notify", this.form.delivery)
-      param.append("board", 1)
+      param.append("board", this.$route.params.id)
       this.axios.post(`/publish`, param).then(res => {
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           alert("发表成功")
         }
       }).catch(e => {

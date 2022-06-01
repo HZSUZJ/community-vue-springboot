@@ -12,10 +12,25 @@
           <el-col :span="12">
             <div class="grid-content">
               <el-container>
-                <el-header>{{ board.name }}</el-header>
+                <el-header>
+                  <el-row>
+                    <el-col :span="12">
+                      {{ board.name }}
+                    </el-col>
+                    <el-col :span="6">
+                      <span>今日贴数</span>
+                      <span>总主题数</span>
+                    </el-col>
+                    <el-col :span="3">
+                      <el-button>关注</el-button>
+                    </el-col>
+
+
+                  </el-row>
+                </el-header>
                 <el-main>{{ board.description }}</el-main>
               </el-container>
-              <el-button type="primary">发主题</el-button>
+              <el-button type="primary" @click="onButton">发主题</el-button>
 
               <!--              分页-->
               <el-row>
@@ -105,6 +120,9 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    onButton() {
+      this.$router.push({path: `/postTopic/${this.$route.params.id}`})
     }
   },
   data() {

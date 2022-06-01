@@ -25,13 +25,13 @@ public class PublishController {
         Topic topic = new Topic();
         topic.setTitle(title);
         topic.setContent(content);
-        topic.setNotify(notify == true ? 1 : 0);
+        topic.setNotify(notify ? 1 : 0);
         topic.setBoard(board);
         topic.setCreator(uid);
         topicService.creatTopic(topic);
         JSONObject jsonObject = new JSONObject();
-        HashMap<String, String> map = new HashMap<>();
-        map.put("code", "200");
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
     }
