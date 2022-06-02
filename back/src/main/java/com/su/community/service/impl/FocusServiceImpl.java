@@ -27,10 +27,38 @@ public class FocusServiceImpl implements FocusService {
     private BoardMapper boardMapper;
     @Autowired
     private TopicStatisticService topicStatisticService;
+    @Autowired
+    private FollowBoardMapper followBoardMapper;
+
 
     @Override
     public List<TopicDTO> focusBoard(Long uid) {
-        return null;
+        QueryWrapper<FollowBoard> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", uid);
+        List<FollowBoard> followBoards = followBoardMapper.selectList(wrapper);
+        List<Integer> boardIds = new ArrayList<>();
+        for (FollowBoard followBoard : followBoards) {
+            boardIds.add(followBoard.getBoardId());
+        }
+        QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
+        topicQueryWrapper.in("board", boardIds).orderByDesc("gmt_modified");
+        List<Topic> topics = topicMapper.selectList(topicQueryWrapper);
+        List<TopicDTO> topicDTOS = new ArrayList<>();
+        for (Topic topic : topics) {
+            User user = userMapper.selectById(topic.getCreator());
+            TopicDTO topicDTO = new TopicDTO();
+            BeanUtils.copyProperties(topic, topicDTO);
+            String boardName = boardMapper.selectById(topic.getBoard()).getName();
+            topicDTO.setBoard(boardName);
+            topicDTO.setUser(user);
+            TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicDTO.getId());
+            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setLikeCount(topicStatistic.getLikeCount());
+            topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
+            topicDTO.setCommentCount(topicStatistic.getCommentCount());
+            topicDTOS.add(topicDTO);
+        }
+        return topicDTOS;
     }
 
     @Override

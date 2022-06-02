@@ -19,8 +19,13 @@ public class FocusController {
     @GetMapping("/focus/board")
     public String focusBoard(HttpServletRequest request) {
         Long uid = (Long) request.getSession().getAttribute("UID");
-
-        return null;
+        List<TopicDTO> topicDTOS = focusService.focusBoard(uid);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", topicDTOS);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
     }
 
     @GetMapping("/focus/user")

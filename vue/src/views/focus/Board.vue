@@ -15,9 +15,8 @@ export default {
     }
   },
   created() {
-    this.axios.get(`/`).then(res => {
+    this.axios.get(`/focus/board`).then(res => {
       if (res.data.code === 200) {
-        console.log(res.data.data)
         this.topics = res.data.data
       }
     }).catch(e => {

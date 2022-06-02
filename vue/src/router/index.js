@@ -58,7 +58,8 @@ const router = new Router({
         {
           path: '/focus/board',
           name: 'board',
-          component: Board
+          component: Board,
+          alias: ''
         },
         {
           path: '/focus/user',
