@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,8 +32,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardId}")
-    public String getBoardDetail(@PathVariable("boardId") Integer boardId) {
-        BoardDTO boardDTO = boardService.getBoardById(boardId);
+    public String getBoardDetail(@PathVariable("boardId") Integer boardId, HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        BoardDTO boardDTO = boardService.getBoardById(boardId, uid);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);

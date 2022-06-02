@@ -22,7 +22,8 @@
                       <span>总主题数</span>
                     </el-col>
                     <el-col :span="3">
-                      <el-button>关注</el-button>
+                      <el-button @click="doFollowBoard" v-if="board.isFollowBoard===false">关注</el-button>
+                      <el-button @click="doCancelFollowBoard" v-if="board.isFollowBoard===true">取关</el-button>
                     </el-col>
 
 
@@ -123,6 +124,24 @@ export default {
     },
     onButton() {
       this.$router.push({path: `/postTopic/${this.$route.params.id}`})
+    },
+    doFollowBoard() {
+      this.axios.get(`/addFollowBoard/${this.board.id}`).then(res => {
+        if (res.data.code === 200) {
+          this.board.isFollowBoard = true
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
+    },
+    doCancelFollowBoard() {
+      this.axios.get(`/deleteFollowBoard/${this.board.id}`).then(res => {
+        if (res.data.code === 200) {
+          this.board.isFollowBoard = false
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
     }
   },
   data() {
