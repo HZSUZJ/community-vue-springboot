@@ -9,4 +9,7 @@ public interface BoardService {
     List<Board> getBoardList();
 
     BoardDTO getBoardById(Integer boardId, Long uid);
+
+    List<BoardDTO> getFocusBoards(Long uid);
+    
 }

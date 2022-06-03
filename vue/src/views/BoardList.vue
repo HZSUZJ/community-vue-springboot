@@ -34,7 +34,7 @@ export default {
   },
   created() {
     this.axios.get(`/getBoardList`).then(res => {
-      if (res.data.code === "200") {
+      if (res.data.code === 200) {
         console.log(res.data.data)
         this.boards = res.data.data
       }

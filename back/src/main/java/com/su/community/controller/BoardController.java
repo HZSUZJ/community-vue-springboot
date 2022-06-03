@@ -25,7 +25,7 @@ public class BoardController {
         List<Board> boards = boardService.getBoardList();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
-        map.put("code", "200");
+        map.put("code", 200);
         map.put("data", boards);
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
@@ -39,6 +39,18 @@ public class BoardController {
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
         map.put("data", boardDTO);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
+    @GetMapping("/getFocusBoards")
+    public String getFocusBoards(HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        List<BoardDTO> boardDTOS = boardService.getFocusBoards(uid);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", boardDTOS);
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
     }

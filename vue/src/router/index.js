@@ -14,7 +14,7 @@ import Response from "../views/message/Response";
 import Attme from "../views/message/Attme";
 import System from "../views/message/System";
 import DirectMessages from "../views/message/DirectMessages";
-import UserCenter from "../views/UserCenter";
+import UserCenter from "../views/usercenter/UserCenter";
 import Detail from "../views/usercenter/Detail";
 import Config from "../views/usercenter/Config";
 import MyTopics from "../views/usercenter/MyTopics";
@@ -25,6 +25,7 @@ import MyFans from "../views/usercenter/MyFans";
 import PostTopic from "../views/PostTopic";
 import TopicDetail from '../views/TopicDetail'
 import BoardDetail from '../views/BoardDetail'
+import MyFocusBoards from '../views/usercenter/MyFocusBoards'
 
 Vue.use(Router)
 const router = new Router({
@@ -133,7 +134,7 @@ const router = new Router({
         {
           path: '/usercenter/myfocusboards',
           name: 'myfocusboards',
-          component: MyFavorites
+          component: MyFocusBoards
         },
         {
           path: '/usercenter/myfollowings',

@@ -62,4 +62,26 @@ public class BoardServiceImpl implements BoardService {
         boardDTO.setTopics(topicDTOS);
         return boardDTO;
     }
+
+    @Override
+    public List<BoardDTO> getFocusBoards(Long uid) {
+        QueryWrapper<FollowBoard> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", uid);
+        List<FollowBoard> followBoards = followBoardMapper.selectList(wrapper);
+        List<Integer> boardIds = new ArrayList<>();
+        for (FollowBoard followBoard : followBoards) {
+            boardIds.add(followBoard.getBoardId());
+        }
+        QueryWrapper<Board> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("id", boardIds);
+        List<Board> boards = boardMapper.selectList(queryWrapper);
+        List<BoardDTO> boardDTOS = new ArrayList<>();
+        for (Board board : boards) {
+            BoardDTO boardDTO = new BoardDTO();
+            BeanUtils.copyProperties(board, boardDTO);
+            boardDTO.setIsFollowBoard(true);
+            boardDTOS.add(boardDTO);
+        }
+        return boardDTOS;
+    }
 }
