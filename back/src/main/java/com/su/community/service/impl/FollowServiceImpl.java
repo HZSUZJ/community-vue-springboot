@@ -64,4 +64,34 @@ public class FollowServiceImpl implements FollowService {
         }
         return followeeDTOS;
     }
+
+    @Override
+    public List<FolloweeDTO> getFans(Long userId) {
+//        得到我关注的人
+        List<Follow> myFollows = getAllFollowee(userId);
+        List<Long> myFollowIds = new ArrayList<>();
+        for (Follow myFollow : myFollows) {
+            myFollowIds.add(myFollow.getFolloweeId());
+        }
+
+//        得到我的粉丝
+        QueryWrapper<Follow> wrapper = new QueryWrapper<>();
+        wrapper.eq("followee_id", userId);
+        List<Follow> follows = followMapper.selectList(wrapper);
+        List<FolloweeDTO> followeeDTOS = new ArrayList<>();
+        for (Follow follow : follows) {
+            FolloweeDTO followeeDTO = new FolloweeDTO();
+            followeeDTO.setIsFollowee(myFollowIds.contains(follow.getUserId()));
+            followeeDTO.setId(follow.getUserId());
+            User user = userMapper.selectById(follow.getUserId());
+            followeeDTO.setUsername(user.getUsername());
+            followeeDTO.setTopicNum(topicMapper.selectCount(new QueryWrapper<Topic>()
+                    .eq("creator", follow.getUserId())));
+            followeeDTO.setFansNum(followMapper.selectCount(new QueryWrapper<Follow>()
+                    .eq("followee_id", follow.getUserId())));
+            followeeDTO.setAvatarUrl(user.getAvatarUrl());
+            followeeDTOS.add(followeeDTO);
+        }
+        return followeeDTOS;
+    }
 }

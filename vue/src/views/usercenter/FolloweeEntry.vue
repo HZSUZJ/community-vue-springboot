@@ -11,10 +11,10 @@
       </el-col>
       <el-col :span="6">
         <el-button class="replierBtn" style="float: left" v-if="followee.isFollowee===true"
-                   @click="doCancelFollow(`${followee.id}`)">取消关注
+                   @click="doCancelFollow(`${followee.id}`)">取关
         </el-button>
         <el-button class="replierBtn" style="float: left" v-if="followee.isFollowee===false"
-                   @click="doFollow(`${followee.id}`)">重新关注
+                   @click="doFollow(`${followee.id}`)">关注
         </el-button>
       </el-col>
     </el-row>

@@ -59,4 +59,16 @@ public class FollowController {
         return jsonObject.toJSONString();
     }
 
+    @GetMapping("/getFans")
+    public String getFans(HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        List<FolloweeDTO> followeeDTOS = followService.getFans(uid);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", followeeDTOS);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
 }

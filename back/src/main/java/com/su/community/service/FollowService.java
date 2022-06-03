@@ -13,4 +13,6 @@ public interface FollowService {
     List<Follow> getAllFollowee(Long userId);
 
     List<FolloweeDTO> getFollowees(Long userId);
+
+    List<FolloweeDTO> getFans(Long userId);
 }
