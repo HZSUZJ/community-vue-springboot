@@ -73,8 +73,11 @@ public class BoardServiceImpl implements BoardService {
             boardIds.add(followBoard.getBoardId());
         }
         QueryWrapper<Board> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("id", boardIds);
-        List<Board> boards = boardMapper.selectList(queryWrapper);
+        List<Board> boards = new ArrayList<>();
+        if (boardIds.size() != 0) {
+            queryWrapper.in("id", boardIds);
+            boards = boardMapper.selectList(queryWrapper);
+        }
         List<BoardDTO> boardDTOS = new ArrayList<>();
         for (Board board : boards) {
             BoardDTO boardDTO = new BoardDTO();

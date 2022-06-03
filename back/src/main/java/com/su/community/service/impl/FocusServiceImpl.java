@@ -41,8 +41,12 @@ public class FocusServiceImpl implements FocusService {
             boardIds.add(followBoard.getBoardId());
         }
         QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
-        topicQueryWrapper.in("board", boardIds).orderByDesc("gmt_modified");
-        List<Topic> topics = topicMapper.selectList(topicQueryWrapper);
+        List<Topic> topics = new ArrayList<>();
+        if (boardIds.size() != 0) {
+            topicQueryWrapper.in("board", boardIds).orderByDesc("gmt_modified");
+            topics = topicMapper.selectList(topicQueryWrapper);
+        }
+
         List<TopicDTO> topicDTOS = new ArrayList<>();
         for (Topic topic : topics) {
             User user = userMapper.selectById(topic.getCreator());
@@ -71,8 +75,11 @@ public class FocusServiceImpl implements FocusService {
             userIds.add(follow.getFolloweeId());
         }
         QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
-        topicQueryWrapper.in("creator", userIds).orderByDesc("gmt_modified");
-        List<Topic> topics = topicMapper.selectList(topicQueryWrapper);
+        List<Topic> topics = new ArrayList<>();
+        if (userIds.size() != 0) {
+            topicQueryWrapper.in("creator", userIds).orderByDesc("gmt_modified");
+            topics = topicMapper.selectList(topicQueryWrapper);
+        }
         List<TopicDTO> topicDTOS = new ArrayList<>();
         for (Topic topic : topics) {
             User user = userMapper.selectById(topic.getCreator());
@@ -101,8 +108,11 @@ public class FocusServiceImpl implements FocusService {
             topicIds.add(collection.getTopicId());
         }
         QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
-        topicQueryWrapper.in("id", topicIds).orderByDesc("gmt_modified");
-        List<Topic> topics = topicMapper.selectList(topicQueryWrapper);
+        List<Topic> topics = new ArrayList<>();
+        if (topicIds.size() != 0) {
+            topicQueryWrapper.in("id", topicIds).orderByDesc("gmt_modified");
+            topics = topicMapper.selectList(topicQueryWrapper);
+        }
         List<TopicDTO> topicDTOS = new ArrayList<>();
         for (Topic topic : topics) {
             User user = userMapper.selectById(topic.getCreator());
