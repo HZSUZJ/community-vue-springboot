@@ -96,4 +96,20 @@ public class TopicServiceImpl implements TopicService {
         topicDTO.setBoard(boardName);
         return topicDTO;
     }
+
+    @Override
+    public List<TopicDTO> getTopicsByUserId(Long uid) {
+        QueryWrapper<Topic> wrapper = new QueryWrapper<>();
+        wrapper.eq("creator", uid).orderByDesc("gmt_create");
+        List<Topic> topics = topicMapper.selectList(wrapper);
+        List<TopicDTO> topicDTOS = new ArrayList<>();
+        for (Topic topic : topics) {
+            TopicDTO topicDTO = new TopicDTO();
+            BeanUtils.copyProperties(topic, topicDTO);
+            String boardName = boardMapper.selectById(topic.getBoard()).getName();
+            topicDTO.setBoard(boardName);
+            topicDTOS.add(topicDTO);
+        }
+        return topicDTOS;
+    }
 }

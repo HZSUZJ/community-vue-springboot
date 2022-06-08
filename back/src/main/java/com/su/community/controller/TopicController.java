@@ -43,5 +43,15 @@ public class TopicController {
         return jsonObject.toJSONString();
     }
 
-
+    @GetMapping("/myTopics")
+    public String myTopic(HttpServletRequest request) {
+        Long uid = (Long) request.getSession().getAttribute("UID");
+        List<TopicDTO> topicDTOS = topicService.getTopicsByUserId(uid);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", topicDTOS);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
 }
