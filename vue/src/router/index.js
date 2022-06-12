@@ -109,7 +109,8 @@ const router = new Router({
         {
           path: '/usercenter/detail',
           name: 'detail',
-          component: Detail
+          component: Detail,
+          alias: ''
         },
         {
           path: '/usercenter/config',
