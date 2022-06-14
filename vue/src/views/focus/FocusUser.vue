@@ -8,7 +8,7 @@
 import topicEntry from '../TopicEntry'
 
 export default {
-  name: "User",
+  name: "FocusUser",
   data() {
     return {
       topics: ''

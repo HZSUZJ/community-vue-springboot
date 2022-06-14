@@ -46,17 +46,17 @@ mybatis-plus:
     db-config:
       logic-delete-field: deleted
 
-
-logging:
-  file:
-    name: back/logs/community.log
-  level:
-    root: info
-    com:
-      su:
-        community:
-          mapper: debug
-  logback:
-    rollingpolicy:
-      max-file-size: 200MB
-      max-history: 30
+#
+#logging:
+#  file:
+#    name: back/logs/community.log
+#  level:
+#    root: info
+#    com:
+#      su:
+#        community:
+#          mapper: debug
+#  logback:
+#    rollingpolicy:
+#      max-file-size: 200MB
+#      max-history: 30

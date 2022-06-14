@@ -5,10 +5,7 @@ import com.su.community.dto.ProfileDTO;
 import com.su.community.pojo.Profile;
 import com.su.community.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -22,7 +19,7 @@ public class ProfileController {
     @GetMapping("/getOwnProfile")
     public String getOwnProfile(HttpServletRequest request) {
         Long uid = (Long) request.getSession().getAttribute("UID");
-        ProfileDTO profileDTO = profileService.getUserProfile(uid);
+        ProfileDTO profileDTO = profileService.getOwnProfile(uid);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -41,6 +38,17 @@ public class ProfileController {
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
+    @GetMapping("/user/{userId}")
+    public String getUserProfile(@PathVariable("userId") Long userId) {
+        ProfileDTO profileDTO = profileService.getUserProfile(userId);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", profileDTO);
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
     }

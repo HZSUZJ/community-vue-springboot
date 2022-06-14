@@ -2,6 +2,8 @@ package com.su.community.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ProfileDTO {
     private String username;
@@ -12,4 +14,5 @@ public class ProfileDTO {
     private Integer fansNum;
     private Long gmtRegistration;
     private Long gmtLogin;
+    private List<TopicDTO> topics;
 }

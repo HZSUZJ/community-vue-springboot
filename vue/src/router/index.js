@@ -7,9 +7,9 @@ import BoardList from "../views/BoardList"
 import NewTopics from "../views/NewTopics"
 import Focus from "../views/focus/Focus"
 import Board from "../views/focus/Board";
-import User from "../views/focus/User";
+import FocusUser from "../views/focus/FocusUser";
 import Favorite from "../views/focus/Favorite";
-import Message from "../views/Message";
+import Message from "../views/message/Message";
 import Response from "../views/message/Response";
 import Attme from "../views/message/Attme";
 import System from "../views/message/System";
@@ -26,6 +26,7 @@ import PostTopic from "../views/PostTopic";
 import TopicDetail from '../views/TopicDetail'
 import BoardDetail from '../views/BoardDetail'
 import MyFocusBoards from '../views/usercenter/MyFocusBoards'
+import User from '../views/User'
 
 Vue.use(Router)
 const router = new Router({
@@ -64,8 +65,8 @@ const router = new Router({
         },
         {
           path: '/focus/user',
-          name: 'user',
-          component: User
+          name: 'focusUser',
+          component: FocusUser
         },
         {
           path: '/focus/favorite',
@@ -163,6 +164,11 @@ const router = new Router({
       path: '/board/:id',
       name: 'BoardDetail',
       component: BoardDetail
+    },
+    {
+      path: '/user/:id',
+      name: 'User',
+      component: User
     },
     {
       path: '/gohome',
