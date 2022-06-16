@@ -3,8 +3,8 @@ import Router from 'vue-router'
 import Main from '../views/Main'
 import Login from '../views/Login'
 import NotFound from '../views/NotFound'
-import BoardList from "../views/BoardList"
-import NewTopics from "../views/NewTopics"
+import BoardList from "../views/board/BoardList"
+import NewTopics from "../views/topic/NewTopics"
 import Focus from "../views/focus/Focus"
 import Board from "../views/focus/Board";
 import FocusUser from "../views/focus/FocusUser";
@@ -22,15 +22,35 @@ import MyPosts from "../views/usercenter/MyPosts";
 import MyFavorites from "../views/usercenter/MyFavorites";
 import MyFollowings from "../views/usercenter/MyFollowings";
 import MyFans from "../views/usercenter/MyFans";
-import PostTopic from "../views/PostTopic";
-import TopicDetail from '../views/TopicDetail'
-import BoardDetail from '../views/BoardDetail'
+import PostTopic from "../views/topic/PostTopic";
+import TopicDetail from '../views/topic/TopicDetail'
+import BoardDetail from '../views/board/BoardDetail'
 import MyFocusBoards from '../views/usercenter/MyFocusBoards'
 import User from '../views/User'
 
+const scrollBehavior = function (to, from, savedPosition) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const position = {}
+      if (to.hash) {
+        if (to.hash) {
+          if (to.hash === '#10') {
+            position.selector = '#0'
+          } else {
+            position.selector = to.hash
+          }
+        }
+      }
+      resolve(
+        position
+      )
+    }, 500)
+  })
+}
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
+  scrollBehavior,
   routes: [
     {
       path: '/',
@@ -158,7 +178,12 @@ const router = new Router({
     {
       path: '/topic/:id',
       name: 'TopicDetail',
-      component: TopicDetail
+      component: TopicDetail,
+    },
+    {
+      path: '/topic/:id/:page',
+      name: 'TopicDetail',
+      component: TopicDetail,
     },
     {
       path: '/board/:id',

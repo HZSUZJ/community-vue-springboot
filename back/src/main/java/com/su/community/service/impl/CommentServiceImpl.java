@@ -1,15 +1,16 @@
 package com.su.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.su.community.dto.CommentDTO;
 import com.su.community.mapper.CommentMapper;
+import com.su.community.mapper.TopicStatisticMapper;
 import com.su.community.mapper.UserMapper;
-import com.su.community.pojo.Comment;
-import com.su.community.pojo.Follow;
-import com.su.community.pojo.User;
+import com.su.community.pojo.*;
 import com.su.community.service.CommentService;
 import com.su.community.service.FollowService;
+import com.su.community.service.NotificationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,29 @@ public class CommentServiceImpl implements CommentService {
     private UserMapper userMapper;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private TopicStatisticMapper topicStatisticMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
-    public void createComment(Comment comment) {
+    public void createComment(Comment comment, Notification notification) {
+        QueryWrapper<TopicStatistic> wrapper = new QueryWrapper<>();
+        wrapper.eq("topic_id", comment.getTopicId());
+        TopicStatistic topicStatistic = topicStatisticMapper.selectOne(wrapper);
+        topicStatistic.setCommentCount(topicStatistic.getCommentCount() + 1);
+        comment.setFloor(topicStatistic.getCommentCount());
+        UpdateWrapper<TopicStatistic> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("topic_id", comment.getTopicId()).setSql("comment_count=comment_count+1");
+        topicStatisticMapper.update(null, updateWrapper);
         commentMapper.insert(comment);
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
+        commentQueryWrapper.eq("topic_id", comment.getTopicId()).eq("floor", comment.getFloor());
+        Comment comment1 = commentMapper.selectOne(commentQueryWrapper);
+        notification.setCommentId(comment1.getId());
+        if (!notification.getNotifier().equals(notification.getReceiver())) {
+            notificationService.addNotification(notification);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ public class CommentDTO {
     private String content;
     private Long likeCount;
     private Long dislikeCount;
+    private Integer floor;
     private Long gmtCreate;
     private Long gmtModified;
     private Boolean isFollowee;

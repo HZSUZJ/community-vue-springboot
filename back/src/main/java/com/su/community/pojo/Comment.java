@@ -16,6 +16,7 @@ public class Comment {
     private String content;
     private Long likeCount;
     private Long dislikeCount;
+    private Integer floor;
     @TableField(fill = FieldFill.INSERT)
     private Long gmtCreate;
     @TableField(fill = FieldFill.INSERT_UPDATE)

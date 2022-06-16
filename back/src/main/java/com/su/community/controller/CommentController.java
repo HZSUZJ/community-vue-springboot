@@ -3,6 +3,7 @@ package com.su.community.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.su.community.dto.CommentDTO;
 import com.su.community.pojo.Comment;
+import com.su.community.pojo.Notification;
 import com.su.community.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +22,19 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/postComment")
-    public String postComment(Long topicId, Long parentId, String content, HttpServletRequest request) {
+    public String postComment(Long topicId, Long parentId, String content, Long topicUserId, HttpServletRequest request) {
         Long uid = (Long) request.getSession().getAttribute("UID");
         Comment comment = new Comment();
         comment.setTopicId(topicId);
         comment.setParentId(parentId);
         comment.setContent(content);
         comment.setCommentator(uid);
-        commentService.createComment(comment);
+        Notification notification = new Notification();
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(topicUserId);
+        notification.setTopicId(comment.getTopicId());
+        notification.setType(1);
+        commentService.createComment(comment, notification);
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
         JSONObject jsonObject = new JSONObject();

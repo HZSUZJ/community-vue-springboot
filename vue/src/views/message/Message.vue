@@ -11,15 +11,23 @@
         <div class="grid-content">
           <el-row>
             <el-container>
-              <el-aside width="100px">
+              <el-aside width="150px">
                 <el-tabs :tab-position="tabPosition" style="height: 320px;" @tab-click="handleClick">
                   <el-tab-pane label="回复我的" name="1">
+                    <span slot="label">回复我的 <el-badge class="mark" v-if="this.notificationNum.replyCount!==0"
+                                                      :value="this.notificationNum.replyCount"/></span>
                   </el-tab-pane>
                   <el-tab-pane label="@ 我的" name="2">
+                    <span slot="label">@ 我的 <el-badge class="mark" v-if="this.notificationNum.atCount!==0"
+                                                      :value="this.notificationNum.atCount"/></span>
                   </el-tab-pane>
                   <el-tab-pane label="系统通知" name="3">
+                    <span slot="label">系统通知 <el-badge class="mark" v-if="this.notificationNum.systemCount!==0"
+                                                      :value="this.notificationNum.systemCount"/></span>
                   </el-tab-pane>
                   <el-tab-pane label="我的私信" name="4">
+                    <span slot="label">我的私信 <el-badge class="mark" v-if="this.notificationNum.messageCount!==0"
+                                                      :value="this.notificationNum.messageCount"/></span>
                   </el-tab-pane>
                 </el-tabs>
               </el-aside>
@@ -43,7 +51,8 @@ export default {
   name: "Message",
   data() {
     return {
-      tabPosition: 'left'
+      tabPosition: 'left',
+      notificationNum: ''
     };
   },
   methods: {
@@ -64,6 +73,15 @@ export default {
           break
       }
     }
+  },
+  created() {
+    this.axios.get(`/notification/unreadCount`).then(res => {
+      if (res.data.code === 200) {
+        this.notificationNum = res.data.data
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
   }
 }
 </script>

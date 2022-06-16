@@ -31,8 +31,6 @@ public class TopicStatisticServiceImpl implements TopicStatisticService {
     public void increaseViews(Long topicId) {
         UpdateWrapper<TopicStatistic> wrapper = new UpdateWrapper<>();
         wrapper.eq("topic_id", topicId).setSql("views=views+1");
-        TopicStatistic topicStatistic = new TopicStatistic();
-        topicStatistic.setTopicId(topicId);
-        topicStatisticMapper.update(topicStatistic, wrapper);
+        topicStatisticMapper.update(null, wrapper);
     }
 }

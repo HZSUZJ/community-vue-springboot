@@ -4,21 +4,17 @@
       <el-col :span="4">
         <el-avatar :src=profile.avatarUrl></el-avatar>
         <br>
-        {{ profile.username }}
+
       </el-col>
       <el-col :span="12">
-
-        <el-row>
-          <el-col :span="12">性别：{{ profile.sex }}</el-col>
-          <el-col :span="12">发帖数：{{ profile.topicNum }}</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">粉丝数：{{ profile.fansNum }}</el-col>
-          <el-col :span="12">注册时间：{{ profile.gmtRegistration|formatDate }}</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">登录时间：{{ profile.gmtLogin |formatDate }}</el-col>
-        </el-row>
+        <el-descriptions title="用户信息" column="2">
+          <el-descriptions-item label="用户名">{{ profile.username }}</el-descriptions-item>
+          <el-descriptions-item label="性别">{{ profile.sex }}</el-descriptions-item>
+          <el-descriptions-item label="发帖数">{{ profile.topicNum }}</el-descriptions-item>
+          <el-descriptions-item label="粉丝数">{{ profile.fansNum }}</el-descriptions-item>
+          <el-descriptions-item label="注册时间">{{ profile.gmtRegistration|formatDate }}</el-descriptions-item>
+          <el-descriptions-item label="登录时间">{{ profile.gmtLogin |formatDate }}</el-descriptions-item>
+        </el-descriptions>
       </el-col>
     </el-row>
     <el-row>

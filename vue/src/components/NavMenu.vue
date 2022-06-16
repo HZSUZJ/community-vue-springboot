@@ -15,11 +15,21 @@
               </el-input>
             </el-menu-item>
             <el-submenu index="5">
-              <template slot="title">消息中心</template>
-              <el-menu-item index="5-1">回复我的</el-menu-item>
-              <el-menu-item index="5-2">@我的</el-menu-item>
-              <el-menu-item index="5-3">系统中心</el-menu-item>
-              <el-menu-item index="5-4">我的私信</el-menu-item>
+              <template slot="title">消息中心
+                <el-badge :value="notificationNum.totalCount" v-if="notificationNum.totalCount!==0" class="item"/>
+              </template>
+              <el-menu-item index="5-1">回复我的
+                <el-badge :value="notificationNum.replyCount" v-if="notificationNum.replyCount!==0" class="item"/>
+              </el-menu-item>
+              <el-menu-item index="5-2">@我的
+                <el-badge :value="notificationNum.atCount" v-if="notificationNum.atCount!==0" class="item"/>
+              </el-menu-item>
+              <el-menu-item index="5-3">系统通知
+                <el-badge :value="notificationNum.systemCount" v-if="notificationNum.systemCount!==0" class="item"/>
+              </el-menu-item>
+              <el-menu-item index="5-4">我的私信
+                <el-badge :value="notificationNum.messageCount" v-if="notificationNum.messageCount!==0" class="item"/>
+              </el-menu-item>
             </el-submenu>
             <el-submenu index="6">
               <template slot="title">
@@ -44,12 +54,22 @@ export default {
     return {
       input1: '',
       uname: '',
-      uavatar: ''
+      uavatar: '',
+      notificationNum: ''
     };
   },
   created() {
     this.uname = localStorage.username
     this.uavatar = localStorage.uavatar
+    this.axios.get(`/notification/unreadCount`).then(res => {
+      if (res.data.code === 200) {
+        this.notificationNum = res.data.data
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
+
+
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -64,16 +84,16 @@ export default {
           this.$router.push({path: '/focus'})
           break
         case '5-1':
-          this.$router.push({path: '/message'})
+          this.$router.push({path: '/message/response'})
           break
         case '5-2':
-          this.$router.push({path: '/message'})
+          this.$router.push({path: '/message/attme'})
           break
         case '5-3':
-          this.$router.push({path: '/message'})
+          this.$router.push({path: '/message/system'})
           break
         case '5-4':
-          this.$router.push({path: '/message'})
+          this.$router.push({path: '/message/directMessages'})
           break
         case '6-1':
           this.$router.push({path: '/usercenter'})

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import topicEntry from '../TopicEntry'
+import topicEntry from '../topic/TopicEntry'
 
 export default {
   name: "board",

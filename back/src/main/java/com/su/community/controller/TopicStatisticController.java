@@ -14,7 +14,6 @@ public class TopicStatisticController {
 
     @GetMapping("/addViews/{id}")
     public String addViews(@PathVariable("id") Long topicId) {
-        System.out.println("hahahahaha" + topicId.toString());
         topicStatisticService.increaseViews(topicId);
         return "ok";
     }

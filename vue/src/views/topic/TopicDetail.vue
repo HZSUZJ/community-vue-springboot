@@ -49,7 +49,7 @@
                   </div>
                 </el-col>
               </el-row>
-              <commentEntry :comment="topic" v-if="currentPage==='1'"></commentEntry>
+              <topicContentEntry :topic="topic" v-if="currentPage==='1'"></topicContentEntry>
               <!--              评论区-->
               <commentEntry v-for="comment in comments" :comment="comment"></commentEntry>
 
@@ -81,6 +81,7 @@
 
 <script>
 import commentEntry from './CommentEntry'
+import topicContentEntry from './TopicContentEntry'
 
 export default {
   name: 'TopicDetail',
@@ -96,7 +97,7 @@ export default {
   methods: {
     changePage(val) {
       this.currentPage = val.toString()
-      console.log(this.currentPage)
+      this.$router.push({path: `/topic/${this.topic.id}/${val}`})
       this.axios.get(`/getAllComment/${this.topic.id}/${val}`).then(res => {
         if (res.data.code === 200) {
           this.comments = res.data.data
@@ -125,6 +126,7 @@ export default {
       param.append('topicId', this.topic.id)
       param.append('parentId', 0)
       param.append('content', this.content)
+      param.append('topicUserId', this.topic.user.id)
       this.axios.post(`/postComment`, param).then(res => {
         if (res.data.code === 200) {
           this.$message({
@@ -133,7 +135,7 @@ export default {
           })
           const that = this
           setTimeout(function () {
-            that.$router.go(0)
+            location.reload()
           }, 1000)
         }
       }).catch(e => {
@@ -160,6 +162,9 @@ export default {
     }
   },
   created() {
+    if (this.$route.params.page != null) {
+      this.currentPage = this.$route.params.page
+    }
     let param = new FormData()
     param.append('id', this.$route.params.id)
     this.axios.get(`/getTopicDetail/${this.$route.params.id}`).then(res => {
@@ -171,7 +176,7 @@ export default {
       alert('服务器故障')
     })
 
-    this.axios.get(`/getAllComment/${this.$route.params.id}/1`).then(res => {
+    this.axios.get(`/getAllComment/${this.$route.params.id}/${this.currentPage}`).then(res => {
       if (res.data.code === 200) {
         this.comments = res.data.data
       }
@@ -195,7 +200,8 @@ export default {
 
   },
   components: {
-    commentEntry: commentEntry
+    commentEntry: commentEntry,
+    topicContentEntry: topicContentEntry
   },
   filters: {
     formatDate: function (value) {
@@ -245,6 +251,5 @@ export default {
   margin-top: 11px;
   border-left: 1px solid #333333;
 }
-
 
 </style>

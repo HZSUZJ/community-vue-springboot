@@ -5,17 +5,17 @@
         <el-aside width="250px" style="background-color: #79b8ca">
           <div class="userMessage" style="margin-top: 24px;">
             <div class="userMessage-left" style="float:left; width: 76px; margin-top:16px; padding-left: 24px;">
-              <el-row style="text-align: left; font-size: 20px">{{ comment.user.username }}</el-row>
+              <el-row style="text-align: left; font-size: 20px">{{ topic.user.username }}</el-row>
             </div>
             <div class="userMessage-right" style="float:right; width: 94px; padding-right: 10px;">
-              <el-avatar :src=comment.user.avatarUrl></el-avatar>
-              <div class="userMessageBtn" style="margin-top: 20px" v-if="comment.isMine===false">
+              <el-avatar :src=topic.user.avatarUrl></el-avatar>
+              <div class="userMessageBtn" style="margin-top: 20px" v-if="topic.isMine===false">
                 <a href="#">
-                  <button class="replierBtn" style="float: left" v-if="comment.isFollowee===true"
-                          @click="doCancelFollow(`${comment.user.id}`)">取关
+                  <button class="replierBtn" style="float: left" v-if="topic.isFollowee===true"
+                          @click="doCancelFollow(`${topic.user.id}`)">取关
                   </button>
-                  <button class="replierBtn" style="float: left" v-if="comment.isFollowee===false"
-                          @click="doFollow(`${comment.user.id}`)">关注
+                  <button class="replierBtn" style="float: left" v-if="topic.isFollowee===false"
+                          @click="doFollow(`${topic.user.id}`)">关注
                   </button>
                 </a>
 
@@ -27,12 +27,12 @@
           </div>
         </el-aside>
 
-        <el-main :src=comment.user.avatarUrl>
+        <el-main :src=topic.user.avatarUrl>
           <el-row style="text-align: left;padding-left: 15px">
-            <v-md-preview :text="comment.content"></v-md-preview>
+            <v-md-preview :text="topic.content"></v-md-preview>
           </el-row>
           <el-row style="text-align: left">
-            <i class="el-icon-time" style="margin-right: 10px">{{ comment.gmtCreate | formatDate }}</i>
+            <i class="el-icon-time" style="margin-right: 10px">{{ topic.gmtCreate | formatDate }}</i>
           </el-row>
         </el-main>
       </el-container>
@@ -42,8 +42,8 @@
 
 <script>
 export default {
-  name: 'CommentEntry',
-  props: ['comment'],
+  name: "TopicContentEntry",
+  props: ['topic'],
   filters: {
     formatDate: function (value) {
       let curdate = new Date().getTime()
@@ -73,7 +73,7 @@ export default {
     doFollow(id) {
       this.axios.get(`/addFollow/${id}`).then(res => {
         if (res.data.code === 200) {
-          this.comment.isFollowee = true
+          this.topic.isFollowee = true
         }
       }).catch(e => {
         alert('服务器故障')
@@ -82,14 +82,13 @@ export default {
     doCancelFollow(id) {
       this.axios.get(`/deleteFollow/${id}`).then(res => {
         if (res.data.code === 200) {
-          this.comment.isFollowee = false
+          this.topic.isFollowee = false
         }
       }).catch(e => {
         alert('服务器故障')
       })
     }
   }
-
 }
 </script>
 
