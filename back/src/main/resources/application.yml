@@ -45,7 +45,10 @@ mybatis-plus:
   global-config:
     db-config:
       logic-delete-field: deleted
-
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  #  type-aliases-package: com.su.community.pojo
+  configuration:
+    map-underscore-to-camel-case: true
 #
 #logging:
 #  file:

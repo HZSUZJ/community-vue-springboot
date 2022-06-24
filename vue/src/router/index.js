@@ -119,6 +119,11 @@ const router = new Router({
           path: '/message/directMessages',
           name: 'directMessages',
           component: DirectMessages
+        },
+        {
+          path: '/message/directMessages/:id',
+          name: 'directMessages',
+          component: DirectMessages
         }
       ]
     },

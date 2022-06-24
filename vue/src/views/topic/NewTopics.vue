@@ -28,7 +28,6 @@
   </div>
 
 
-
 </template>
 
 <script>
@@ -44,7 +43,6 @@ export default {
   created() {
     this.axios.get(`/getNewTopics`).then(res => {
       if (res.data.code === 200) {
-        console.log(res.data.data)
         this.topics = res.data.data
       }
     }).catch(e => {

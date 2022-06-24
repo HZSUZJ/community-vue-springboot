@@ -1,9 +1,11 @@
 package com.su.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.su.community.dto.UserDTO;
 import com.su.community.mapper.UserMapper;
 import com.su.community.pojo.User;
 import com.su.community.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,20 +34,12 @@ public class UserServiceImpl implements UserService {
         userMapper.updateById(user);
     }
 
+    @Override
+    public UserDTO getUserBasic(Long userId) {
+        User user = userMapper.selectById(userId);
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        return userDTO;
+    }
 
-//    public void createOrUpdate(User user) {
-//        User dbUser=userMapper.findByAccountId(user.getAccount_id());
-//        if(dbUser==null){
-//            user.setGmt_create(System.currentTimeMillis());
-//            user.setGmt_modified(System.currentTimeMillis());
-//            userMapper.addUser(dbUser);
-//        }else{
-//            dbUser.setGmt_modified(System.currentTimeMillis());
-//            dbUser.setAvatarUrl(user.getAvatarUrl());
-//            dbUser.setName(user.getName());
-//            dbUser.setToken(user.getToken());
-//            userMapper.update(dbUser);
-//        }
-//
-//    }
 }
