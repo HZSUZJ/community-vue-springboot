@@ -2,8 +2,6 @@ package com.su.community.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class BoardDTO {
     private Integer id;
@@ -12,5 +10,4 @@ public class BoardDTO {
     private Long postCount;
     private Long todayCount;
     private Boolean isFollowBoard;
-    private List<TopicDTO> topics;
 }

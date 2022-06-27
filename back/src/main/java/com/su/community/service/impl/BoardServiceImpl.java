@@ -2,12 +2,12 @@ package com.su.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.su.community.dto.BoardDTO;
-import com.su.community.dto.TopicDTO;
 import com.su.community.mapper.BoardMapper;
 import com.su.community.mapper.FollowBoardMapper;
 import com.su.community.mapper.TopicMapper;
 import com.su.community.mapper.UserMapper;
-import com.su.community.pojo.*;
+import com.su.community.pojo.Board;
+import com.su.community.pojo.FollowBoard;
 import com.su.community.service.BoardService;
 import com.su.community.service.TopicStatisticService;
 import org.springframework.beans.BeanUtils;
@@ -45,21 +45,6 @@ public class BoardServiceImpl implements BoardService {
         boardQueryWrapper.eq("user_id", uid).eq("board_id", boardId);
         FollowBoard followBoard = followBoardMapper.selectOne(boardQueryWrapper);
         boardDTO.setIsFollowBoard(followBoard != null);
-        QueryWrapper<Topic> wrapper = new QueryWrapper<>();
-        wrapper.eq("board", boardId);
-        List<Topic> topics = topicMapper.selectList(wrapper);
-        List<TopicDTO> topicDTOS = new ArrayList<>();
-        for (Topic topic : topics) {
-            TopicDTO topicDTO = new TopicDTO();
-            BeanUtils.copyProperties(topic, topicDTO);
-            User user = userMapper.selectById(topic.getCreator());
-            topicDTO.setUser(user);
-            TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topic.getId());
-            topicDTO.setViews(topicStatistic.getViews());
-            topicDTO.setCommentCount(topicStatistic.getCommentCount());
-            topicDTOS.add(topicDTO);
-        }
-        boardDTO.setTopics(topicDTOS);
         return boardDTO;
     }
 

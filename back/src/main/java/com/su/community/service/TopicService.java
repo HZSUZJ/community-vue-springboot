@@ -6,11 +6,16 @@ import com.su.community.pojo.Topic;
 import java.util.List;
 
 public interface TopicService {
-    void creatTopic(Topic topic);
+    Long creatTopic(Topic topic);
 
     List<TopicDTO> getAllTopic();
 
     TopicDTO getTopicById(Long topicId, Long uid);
 
     List<TopicDTO> getTopicsByUserId(Long uid);
+
+    List<TopicDTO> getTopicsByBoardIdAndPage(Integer boardId, Integer current);
+
+    Long getTotalCountByBoardId(Integer boardId);
+
 }

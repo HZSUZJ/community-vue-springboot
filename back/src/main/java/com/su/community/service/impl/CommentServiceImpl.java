@@ -43,10 +43,7 @@ public class CommentServiceImpl implements CommentService {
         updateWrapper.eq("topic_id", comment.getTopicId()).setSql("comment_count=comment_count+1");
         topicStatisticMapper.update(null, updateWrapper);
         commentMapper.insert(comment);
-        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
-        commentQueryWrapper.eq("topic_id", comment.getTopicId()).eq("floor", comment.getFloor());
-        Comment comment1 = commentMapper.selectOne(commentQueryWrapper);
-        notification.setCommentId(comment1.getId());
+        notification.setCommentId(comment.getId());
         if (!notification.getNotifier().equals(notification.getReceiver())) {
             notificationService.addNotification(notification);
         }

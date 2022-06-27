@@ -20,5 +20,6 @@ public class TopicDTO {
     private Boolean isMine;
     private Long gmtCreate;
     private Long gmtModified;
+    private String lastReply;
     private User user;
 }

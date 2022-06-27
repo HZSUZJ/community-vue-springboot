@@ -21,9 +21,6 @@
               <el-menu-item index="5-1">回复我的
                 <el-badge :value="notificationNum.replyCount" v-if="notificationNum.replyCount!==0" class="item"/>
               </el-menu-item>
-              <el-menu-item index="5-2">@我的
-                <el-badge :value="notificationNum.atCount" v-if="notificationNum.atCount!==0" class="item"/>
-              </el-menu-item>
               <el-menu-item index="5-3">系统通知
                 <el-badge :value="notificationNum.systemCount" v-if="notificationNum.systemCount!==0" class="item"/>
               </el-menu-item>
@@ -85,9 +82,6 @@ export default {
           break
         case '5-1':
           this.$router.push({path: '/message/response'})
-          break
-        case '5-2':
-          this.$router.push({path: '/message/attme'})
           break
         case '5-3':
           this.$router.push({path: '/message/system'})

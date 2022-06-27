@@ -68,7 +68,7 @@ export default {
       param.append("board", this.$route.params.id)
       this.axios.post(`/publish`, param).then(res => {
         if (res.data.code === 200) {
-          alert("发表成功")
+          this.$router.push({path: `/topic/${res.data.topicId}`})
         }
       }).catch(e => {
         alert('发表失败')

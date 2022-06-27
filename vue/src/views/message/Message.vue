@@ -17,10 +17,6 @@
                     <span slot="label">回复我的 <el-badge class="mark" v-if="this.notificationNum.replyCount!==0"
                                                       :value="this.notificationNum.replyCount"/></span>
                   </el-tab-pane>
-                  <el-tab-pane label="@ 我的" name="2">
-                    <span slot="label">@ 我的 <el-badge class="mark" v-if="this.notificationNum.atCount!==0"
-                                                      :value="this.notificationNum.atCount"/></span>
-                  </el-tab-pane>
                   <el-tab-pane label="系统通知" name="3">
                     <span slot="label">系统通知 <el-badge class="mark" v-if="this.notificationNum.systemCount!==0"
                                                       :value="this.notificationNum.systemCount"/></span>
@@ -61,9 +57,6 @@ export default {
       switch (tab.name) {
         case '1':
           this.$router.push({path: '/message/response'})
-          break
-        case '2':
-          this.$router.push({path: '/message/attme'})
           break
         case '3':
           this.$router.push({path: '/message/system'})

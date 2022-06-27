@@ -54,4 +54,26 @@ public class TopicController {
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
     }
+
+    @GetMapping("/topicsByBoardAndPage/{boardId}/{current}")
+    public String topicsByBoardAndPage(@PathVariable("boardId") Integer boardId, @PathVariable("current") Integer current) {
+        List<TopicDTO> topicDTOS = topicService.getTopicsByBoardIdAndPage(boardId, current);
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("data", topicDTOS);
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
+    @GetMapping("/getTopicTotalCountByBoardId/{boardId}")
+    public String getTopicTotalCountByBoardId(@PathVariable("boardId") Integer boardId) {
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", 200);
+        map.put("total", topicService.getTotalCountByBoardId(boardId));
+        jsonObject.put("data", map);
+        return jsonObject.toJSONString();
+    }
+
 }

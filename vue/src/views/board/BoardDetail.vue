@@ -18,8 +18,8 @@
                       {{ board.name }}
                     </el-col>
                     <el-col :span="6">
-                      <span>今日贴数</span>
-                      <span>总主题数</span>
+                      <span>今日贴数:{{ board.todayCount }}</span>
+                      <span>总主题数:{{ board.postCount }}</span>
                     </el-col>
                     <el-col :span="3">
                       <el-button @click="doFollowBoard" v-if="board.isFollowBoard===false">关注</el-button>
@@ -38,8 +38,7 @@
                 <div class="block">
                   <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
+                    @current-change="changePage"
                     :current-page.sync="currentPage"
                     :page-size="20"
                     layout="prev, pager, next, jumper"
@@ -52,30 +51,41 @@
                 <el-table
                   :data="tableData"
                   style="width: 100%"
-                  :row-class-name="tableRowClassName">
+                  :row-class-name="tableRowClassName"
+                  @row-click="clickOnRow">
                   <el-table-column
                     prop="title"
                     label="标题"
-                    width="180">
+                    width="180"
+                    align="left"
+                    header-align="center">
                   </el-table-column>
                   <el-table-column
                     prop="user.username"
                     label="作者"
-                    width="180">
+                    width="180"
+                    align="center"
+                    header-align="center">
                   </el-table-column>
                   <el-table-column
                     prop="views"
                     label="点击"
-                    width="180">
+                    width="180"
+                    align="center"
+                    header-align="center">
                   </el-table-column>
                   <el-table-column
                     prop="commentCount"
                     label="回复"
-                    width="180">
+                    width="180"
+                    align="center"
+                    header-align="center">
                   </el-table-column>
                   <el-table-column
                     prop="lastReply"
-                    label="最后回复">
+                    label="最新回复"
+                    align="center"
+                    header-align="center">
                   </el-table-column>
                 </el-table>
               </el-row>
@@ -84,8 +94,7 @@
                 <div class="block">
                   <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
+                    @current-change="changePage"
                     :current-page.sync="currentPage"
                     :page-size="20"
                     layout="prev, pager, next, jumper"
@@ -111,6 +120,20 @@
 export default {
   name: "BoardDetail",
   methods: {
+    changePage(val) {
+      this.currentPage = val.toString()
+      this.$router.push({path: `/board/${this.board.id}/${val}`})
+      this.axios.get(`/topicsByBoardAndPage/${this.$route.params.id}/${this.currentPage}`).then(res => {
+        if (res.data.code === 200) {
+          this.tableData = res.data.data
+        }
+      }).catch(e => {
+        alert('服务器故障')
+      })
+    },
+    clickOnRow(val) {
+      this.$router.push({path: `/topic/${val.id}`})
+    },
     tableRowClassName({row, rowIndex}) {
       if (rowIndex === 1) {
         return 'warning-row';
@@ -118,9 +141,6 @@ export default {
         return 'success-row';
       }
       return '';
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
     },
     onButton() {
       this.$router.push({path: `/postTopic/${this.$route.params.id}`})
@@ -147,19 +167,33 @@ export default {
   data() {
     return {
       tableData: [{}],
-      currentPage: 1,
+      currentPage: '1',
       board: '',
       topics: '',
       total: ''
     }
   },
   created() {
+    if (this.$route.params.page != null) {
+      this.currentPage = this.$route.params.page
+    }
     this.axios.get(`/board/${this.$route.params.id}`).then(res => {
       if (res.data.code === 200) {
         this.board = res.data.data
-        this.tableData = this.board.topics
-        this.total = this.tableData.length
-        console.log(this.total)
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
+    this.axios.get(`/getTopicTotalCountByBoardId/${this.$route.params.id}`).then(res => {
+      if (res.data.code === 200) {
+        this.total = res.data.total
+      }
+    }).catch(e => {
+      alert('服务器故障')
+    })
+    this.axios.get(`/topicsByBoardAndPage/${this.$route.params.id}/${this.currentPage}`).then(res => {
+      if (res.data.code === 200) {
+        this.tableData = res.data.data
       }
     }).catch(e => {
       alert('服务器故障')

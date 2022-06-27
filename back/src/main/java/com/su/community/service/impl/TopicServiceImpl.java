@@ -1,11 +1,10 @@
 package com.su.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.su.community.dto.TopicDTO;
-import com.su.community.mapper.BoardMapper;
-import com.su.community.mapper.CollectionMapper;
-import com.su.community.mapper.TopicMapper;
-import com.su.community.mapper.UserMapper;
+import com.su.community.mapper.*;
 import com.su.community.pojo.*;
 import com.su.community.service.FollowService;
 import com.su.community.service.TopicService;
@@ -14,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +27,8 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     private BoardMapper boardMapper;
     @Autowired
+    private CommentMapper commentMapper;
+    @Autowired
     private TopicStatisticService topicStatisticService;
     @Autowired
     private CollectionMapper collectionMapper;
@@ -34,11 +36,17 @@ public class TopicServiceImpl implements TopicService {
     private FollowService followService;
 
     @Override
-    public void creatTopic(Topic topic) {
+    public Long creatTopic(Topic topic) {
         topicMapper.insert(topic);
         TopicStatistic topicStatistic = new TopicStatistic();
         topicStatistic.setTopicId(topic.getId());
         topicStatisticService.creatTopicStatistic(topicStatistic);
+        UpdateWrapper<Board> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id", topic.getBoard())
+                .setSql("post_count=post_count+1")
+                .setSql("today_count=today_count+1");
+        boardMapper.update(null, wrapper);
+        return topic.getId();
     }
 
     @Override
@@ -111,5 +119,42 @@ public class TopicServiceImpl implements TopicService {
             topicDTOS.add(topicDTO);
         }
         return topicDTOS;
+    }
+
+    @Override
+    public List<TopicDTO> getTopicsByBoardIdAndPage(Integer boardId, Integer current) {
+        QueryWrapper<Topic> wrapper = new QueryWrapper<>();
+        wrapper.eq("board", boardId).orderByDesc("gmt_create");
+        Page<Topic> page = new Page<>(current, 20, false);
+        Page<Topic> result = topicMapper.selectPage(page, wrapper);
+        List<Topic> topics = result.getRecords();
+        List<TopicDTO> topicDTOS = new ArrayList<>();
+        for (Topic topic : topics) {
+            TopicDTO topicDTO = new TopicDTO();
+            BeanUtils.copyProperties(topic, topicDTO);
+            User user = userMapper.selectById(topic.getCreator());
+            Comment comment = commentMapper.selectLastComment(topic.getId());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if (comment == null) {
+                String time = format.format(topic.getGmtCreate());
+                topicDTO.setLastReply(user.getUsername() + "/" + time);
+            } else {
+                String time = format.format(comment.getGmtCreate());
+                topicDTO.setLastReply(userMapper.selectById(comment.getCommentator()).getUsername() + "/" + time);
+            }
+            topicDTO.setUser(user);
+            TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topic.getId());
+            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setCommentCount(topicStatistic.getCommentCount());
+            topicDTOS.add(topicDTO);
+        }
+        return topicDTOS;
+    }
+
+    @Override
+    public Long getTotalCountByBoardId(Integer boardId) {
+        QueryWrapper<Topic> wrapper = new QueryWrapper<>();
+        wrapper.eq("board", boardId);
+        return topicMapper.selectCount(wrapper);
     }
 }

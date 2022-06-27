@@ -11,7 +11,6 @@ import FocusUser from "../views/focus/FocusUser";
 import Favorite from "../views/focus/Favorite";
 import Message from "../views/message/Message";
 import Response from "../views/message/Response";
-import Attme from "../views/message/Attme";
 import System from "../views/message/System";
 import DirectMessages from "../views/message/DirectMessages";
 import UserCenter from "../views/usercenter/UserCenter";
@@ -106,11 +105,6 @@ const router = new Router({
           component: Response
         },
         {
-          path: '/message/attme',
-          name: 'attme',
-          component: Attme
-        },
-        {
           path: '/message/system',
           name: 'system',
           component: System
@@ -192,6 +186,11 @@ const router = new Router({
     },
     {
       path: '/board/:id',
+      name: 'BoardDetail',
+      component: BoardDetail
+    },
+    {
+      path: '/board/:id/:page',
       name: 'BoardDetail',
       component: BoardDetail
     },

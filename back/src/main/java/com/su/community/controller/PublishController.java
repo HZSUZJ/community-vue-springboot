@@ -28,10 +28,11 @@ public class PublishController {
         topic.setNotify(notify ? 1 : 0);
         topic.setBoard(board);
         topic.setCreator(uid);
-        topicService.creatTopic(topic);
+        Long topicId = topicService.creatTopic(topic);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
+        map.put("topicId", topicId);
         jsonObject.put("data", map);
         return jsonObject.toJSONString();
     }

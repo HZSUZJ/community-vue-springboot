@@ -165,8 +165,7 @@ export default {
     if (this.$route.params.page != null) {
       this.currentPage = this.$route.params.page
     }
-    let param = new FormData()
-    param.append('id', this.$route.params.id)
+
     this.axios.get(`/getTopicDetail/${this.$route.params.id}`).then(res => {
       if (res.data.code === 200) {
         this.topic = res.data.data
