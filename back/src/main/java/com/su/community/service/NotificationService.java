@@ -9,11 +9,11 @@ import java.util.List;
 public interface NotificationService {
     void addNotification(Notification notification);
 
-    List<NotificationDTO> getAllReply(Long uid);
+    List<NotificationDTO> getAllReply();
 
-    void readReply(Long uid, Long notifyId);
+    void readReply(Long notifyId);
 
-    void readAllReply(Long uid);
+    void readAllReply();
 
-    NotificationNumDTO unreadCount(Long uid);
+    NotificationNumDTO unreadCount();
 }

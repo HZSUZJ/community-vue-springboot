@@ -9,10 +9,12 @@ import com.su.community.pojo.*;
 import com.su.community.service.FollowService;
 import com.su.community.service.TopicService;
 import com.su.community.service.TopicStatisticService;
+import com.su.community.utils.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +33,23 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     private TopicStatisticService topicStatisticService;
     @Autowired
-    private CollectionMapper collectionMapper;
+    private FavouriteMapper collectionMapper;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private TokenUtil tokenUtil;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
-    public Long creatTopic(Topic topic) {
+    public Long creatTopic(String title, String content, Boolean notify, Integer board) {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
+        Topic topic = new Topic();
+        topic.setTitle(title);
+        topic.setContent(content);
+        topic.setNotify(notify ? 1 : 0);
+        topic.setBoard(board);
+        topic.setCreator(userId);
         topicMapper.insert(topic);
         TopicStatistic topicStatistic = new TopicStatistic();
         topicStatistic.setTopicId(topic.getId());
@@ -63,7 +76,7 @@ public class TopicServiceImpl implements TopicService {
             topicDTO.setBoard(boardName);
             topicDTO.setUser(user);
             TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicDTO.getId());
-            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setViews(topicStatisticService.getViews(topicDTO.getId()));
             topicDTO.setLikeCount(topicStatistic.getLikeCount());
             topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
             topicDTO.setCommentCount(topicStatistic.getCommentCount());
@@ -73,11 +86,12 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public TopicDTO getTopicById(Long topicId, Long uid) {
+    public TopicDTO getTopicById(Long topicId) {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         Topic topic = topicMapper.selectById(topicId);
         User user = userMapper.selectById(topic.getCreator());
 
-        List<Follow> follows = followService.getAllFollowee(uid);
+        List<Follow> follows = followService.getAllFollowee();
         List<Long> followeeIds = new ArrayList<>();
         for (Follow follow : follows) {
             followeeIds.add(follow.getFolloweeId());
@@ -87,17 +101,17 @@ public class TopicServiceImpl implements TopicService {
         BeanUtils.copyProperties(topic, topicDTO);
         topicDTO.setUser(user);
         TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicId);
-        topicDTO.setViews(topicStatistic.getViews());
+        topicDTO.setViews(topicStatisticService.getViews(topicId));
         topicDTO.setLikeCount(topicStatistic.getLikeCount());
         topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
         topicDTO.setCommentCount(topicStatistic.getCommentCount());
         //判断是不是自己的帖子
-        topicDTO.setIsMine(topic.getCreator().equals(uid));
+        topicDTO.setIsMine(topic.getCreator().equals(userId));
         //判断贴主是不是自己关注的人
         topicDTO.setIsFollowee(followeeIds.contains(topic.getCreator()));
-        QueryWrapper<Collection> wrapper = new QueryWrapper<>();
-        wrapper.eq("topic_id", topicId).eq("user_id", uid);
-        Collection collection = collectionMapper.selectOne(wrapper);
+        QueryWrapper<Favourite> wrapper = new QueryWrapper<>();
+        wrapper.eq("topic_id", topicId).eq("user_id", userId);
+        Favourite collection = collectionMapper.selectOne(wrapper);
         topicDTO.setIsCollection(collection != null);
 
         String boardName = boardMapper.selectById(topic.getBoard()).getName();
@@ -119,6 +133,12 @@ public class TopicServiceImpl implements TopicService {
             topicDTOS.add(topicDTO);
         }
         return topicDTOS;
+    }
+
+    @Override
+    public List<TopicDTO> getMyTopics() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
+        return getTopicsByUserId(userId);
     }
 
     @Override
@@ -144,7 +164,7 @@ public class TopicServiceImpl implements TopicService {
             }
             topicDTO.setUser(user);
             TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topic.getId());
-            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setViews(topicStatisticService.getViews(topic.getId()));
             topicDTO.setCommentCount(topicStatistic.getCommentCount());
             topicDTOS.add(topicDTO);
         }

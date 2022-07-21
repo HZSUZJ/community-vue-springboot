@@ -7,5 +7,13 @@ public interface TopicStatisticService {
 
     TopicStatistic getTopicStatistic(Long topicId);
 
+    Integer getViews(Long topicId);
+
     void increaseViews(Long topicId);
+
+    void transViewsFromRedis2DB();
+
+    void updateViews(Long topicId, Integer views);
+
+
 }

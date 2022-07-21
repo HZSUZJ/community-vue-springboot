@@ -8,8 +8,8 @@ import java.util.List;
 public interface BoardService {
     List<Board> getBoardList();
 
-    BoardDTO getBoardById(Integer boardId, Long uid);
+    BoardDTO getBoardById(Integer boardId);
 
-    List<BoardDTO> getFocusBoards(Long uid);
-    
+    List<BoardDTO> getFocusBoards();
+
 }

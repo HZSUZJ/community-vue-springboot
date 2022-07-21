@@ -7,10 +7,12 @@ import com.su.community.dto.NotificationNumDTO;
 import com.su.community.mapper.*;
 import com.su.community.pojo.*;
 import com.su.community.service.NotificationService;
+import com.su.community.utils.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,10 @@ public class NotificationServiceImpl implements NotificationService {
     private BoardMapper boardMapper;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private TokenUtil tokenUtil;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public void addNotification(Notification notification) {
@@ -33,9 +39,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationDTO> getAllReply(Long uid) {
+    public List<NotificationDTO> getAllReply() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         QueryWrapper<Notification> wrapper = new QueryWrapper<>();
-        wrapper.eq("receiver", uid).orderByDesc("gmt_create");
+        wrapper.eq("receiver", userId).orderByDesc("gmt_create");
         List<Notification> notifications = notificationMapper.selectList(wrapper);
         List<NotificationDTO> notificationDTOS = new ArrayList<>();
         for (Notification notification : notifications) {
@@ -58,27 +65,30 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void readReply(Long uid, Long notifyId) {
+    public void readReply(Long notifyId) {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         UpdateWrapper<Notification> wrapper = new UpdateWrapper<>();
-        wrapper.eq("receiver", uid).eq("id", notifyId).eq("type", "1").eq("status", "0").setSql("status=1");
+        wrapper.eq("receiver", userId).eq("id", notifyId).eq("type", "1").eq("status", "0").setSql("status=1");
         notificationMapper.update(null, wrapper);
     }
 
     @Override
-    public void readAllReply(Long uid) {
+    public void readAllReply() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         UpdateWrapper<Notification> wrapper = new UpdateWrapper<>();
-        wrapper.eq("receiver", uid).eq("type", "1").eq("status", "0").setSql("status=1");
+        wrapper.eq("receiver", userId).eq("type", "1").eq("status", "0").setSql("status=1");
         notificationMapper.update(null, wrapper);
     }
 
     @Override
-    public NotificationNumDTO unreadCount(Long uid) {
+    public NotificationNumDTO unreadCount() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         NotificationNumDTO notificationNumDTO = new NotificationNumDTO();
         notificationNumDTO.setAtCount(0L);
         notificationNumDTO.setSystemCount(0L);
         notificationNumDTO.setMessageCount(0L);
         QueryWrapper<Notification> queryReplyCountWrapper = new QueryWrapper<>();
-        queryReplyCountWrapper.eq("receiver", uid).eq("status", "0").eq("type", "1");
+        queryReplyCountWrapper.eq("receiver", userId).eq("status", "0").eq("type", "1");
         Long totalCount = 0L;
         Long ReplyCount = notificationMapper.selectCount(queryReplyCountWrapper);
         totalCount += ReplyCount;

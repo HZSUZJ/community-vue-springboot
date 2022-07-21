@@ -1,12 +1,11 @@
 package com.su.community.service;
 
 import com.su.community.dto.ProfileDTO;
-import com.su.community.pojo.Profile;
 
 public interface ProfileService {
-    ProfileDTO getOwnProfile(Long userId);
+    ProfileDTO getOwnProfile();
 
-    void updateProfile(Profile profile);
+    void updateProfile(String signature);
 
     ProfileDTO getUserProfile(Long userId);
 

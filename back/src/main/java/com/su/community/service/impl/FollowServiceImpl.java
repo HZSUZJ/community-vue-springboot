@@ -9,9 +9,11 @@ import com.su.community.pojo.Follow;
 import com.su.community.pojo.Topic;
 import com.su.community.pojo.User;
 import com.su.community.service.FollowService;
+import com.su.community.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,29 +27,42 @@ public class FollowServiceImpl implements FollowService {
     private UserMapper userMapper;
     @Autowired
     private TopicMapper topicMapper;
+    @Autowired
+    private TokenUtil tokenUtil;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
-    public void addFollow(Follow follow) {
+    public void addFollow(Long followeeId) {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
+        Follow follow = new Follow();
+        follow.setFolloweeId(followeeId);
+        follow.setUserId(userId);
         followMapper.insert(follow);
     }
 
     @Override
-    public void deleteFollow(Follow follow) {
+    public void deleteFollow(Long followeeId) {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
+        Follow follow = new Follow();
+        follow.setFolloweeId(followeeId);
+        follow.setUserId(userId);
         QueryWrapper<Follow> wrapper = new QueryWrapper<>();
         wrapper.eq("followee_id", follow.getFolloweeId()).eq("user_id", follow.getUserId());
         followMapper.delete(wrapper);
     }
 
     @Override
-    public List<Follow> getAllFollowee(Long userId) {
+    public List<Follow> getAllFollowee() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         QueryWrapper<Follow> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         return followMapper.selectList(wrapper);
     }
 
     @Override
-    public List<FolloweeDTO> getFollowees(Long userId) {
-        List<Follow> follows = getAllFollowee(userId);
+    public List<FolloweeDTO> getFollowees() {
+        List<Follow> follows = getAllFollowee();
         List<FolloweeDTO> followeeDTOS = new ArrayList<>();
         for (Follow follow : follows) {
             FolloweeDTO followeeDTO = new FolloweeDTO();
@@ -66,9 +81,10 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<FolloweeDTO> getFans(Long userId) {
+    public List<FolloweeDTO> getFans() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
 //        得到我关注的人
-        List<Follow> myFollows = getAllFollowee(userId);
+        List<Follow> myFollows = getAllFollowee();
         List<Long> myFollowIds = new ArrayList<>();
         for (Follow myFollow : myFollows) {
             myFollowIds.add(myFollow.getFolloweeId());

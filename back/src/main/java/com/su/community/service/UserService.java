@@ -12,4 +12,6 @@ public interface UserService {
 
     UserDTO getUserBasic(Long userId);
 
+    String login(String username, String password);
+
 }

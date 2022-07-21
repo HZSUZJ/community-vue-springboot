@@ -30,6 +30,9 @@ spring:
     connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   profiles:
     active: dev
+  redis:
+    host: 10.12.11.142
+    port: 6379
 
 #
 #mybatis:
@@ -49,17 +52,17 @@ mybatis-plus:
   #  type-aliases-package: com.su.community.pojo
   configuration:
     map-underscore-to-camel-case: true
-#
-#logging:
-#  file:
-#    name: back/logs/community.log
-#  level:
-#    root: info
-#    com:
-#      su:
-#        community:
-#          mapper: debug
-#  logback:
-#    rollingpolicy:
-#      max-file-size: 200MB
-#      max-history: 30
+  #
+  #logging:
+  #  file:
+  #    name: back/logs/community.log
+  #  level:
+  #    root: info
+  #    com:
+  #      su:
+  #        community:
+  #          mapper: debug
+  #  logback:
+  #    rollingpolicy:
+  #      max-file-size: 200MB
+  #      max-history: 30

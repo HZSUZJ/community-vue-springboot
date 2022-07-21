@@ -1,35 +1,32 @@
 package com.su.community.utils;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.su.community.pojo.User;
-
-import com.auth0.jwt.JWT;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
+@Component
 public class TokenUtil {
-    private static final long EXPIRE_TIME= 10*60*60*1000;
-    private static final String TOKEN_SECRET="HuangTaoHTMALL";  //密钥盐
+    private static final String TOKEN_SECRET = "SUZJ";  //密钥盐
 
     /**
      * 签名生成
+     *
      * @param user
      * @return
      */
-    public static String sign(User user){
+    public static String sign(User user) {
         String token = null;
         try {
-            Date expiresAt = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             token = JWT.create()
-                    .withIssuer("auth0")
-                    .withClaim("uId", user.getId())
-                    .withExpiresAt(expiresAt)
-                    // 使用了HMAC256加密算法。
+                    .withIssuer("sub")
+                    .withSubject(user.getId().toString())
                     .sign(Algorithm.HMAC256(TOKEN_SECRET));
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return token;
@@ -37,20 +34,41 @@ public class TokenUtil {
 
     /**
      * 签名验证
+     *
      * @param token
      * @return
      */
-    public static boolean verify(String token, HttpServletRequest request){
+    public static boolean verify(String token) {
         try {
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("sub").build();
             DecodedJWT jwt = verifier.verify(token);
             System.out.println("认证通过：");
-            System.out.println("UID: " + jwt.getClaim("uId").asLong());
-            System.out.println("过期时间：      " + jwt.getExpiresAt());
-            request.getSession().setAttribute("UID",jwt.getClaim("uId").asLong());
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
+
+    /**
+     * 从request中获取用户名
+     *
+     * @param request
+     * @return
+     */
+    public Long getUserIdFromRequest(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        return token == null ? null : getUserIdFromToken(token);
+    }
+
+    /**
+     * 从token中获取用户id
+     *
+     * @param token
+     * @return
+     */
+    public Long getUserIdFromToken(String token) {
+        String subject = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("sub").build().verify(token).getSubject();
+        return Long.parseLong(subject);
+    }
+
 }

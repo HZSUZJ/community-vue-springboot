@@ -6,13 +6,13 @@ import com.su.community.pojo.Follow;
 import java.util.List;
 
 public interface FollowService {
-    void addFollow(Follow follow);
+    void addFollow(Long followeeId);
 
-    void deleteFollow(Follow follow);
+    void deleteFollow(Long followeeId);
 
-    List<Follow> getAllFollowee(Long userId);
+    List<Follow> getAllFollowee();
 
-    List<FolloweeDTO> getFollowees(Long userId);
+    List<FolloweeDTO> getFollowees();
 
-    List<FolloweeDTO> getFans(Long userId);
+    List<FolloweeDTO> getFans();
 }

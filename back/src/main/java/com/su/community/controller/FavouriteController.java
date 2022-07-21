@@ -2,30 +2,24 @@ package com.su.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.su.community.dto.TopicDTO;
-import com.su.community.pojo.Collection;
-import com.su.community.service.CollectionService;
+import com.su.community.service.FavouriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
-public class CollectionController {
+public class FavouriteController {
 
     @Autowired
-    private CollectionService collectionService;
+    private FavouriteService favouriteService;
 
     @GetMapping("/addCollection/{topicId}")
-    public String addCollection(@PathVariable("topicId") Long topicId, HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        Collection collection = new Collection();
-        collection.setTopicId(topicId);
-        collection.setUserId(uid);
-        collectionService.addCollection(collection);
+    public String addFavourite(@PathVariable("topicId") Long topicId) {
+        favouriteService.addFavourite(topicId);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -34,12 +28,8 @@ public class CollectionController {
     }
 
     @GetMapping("/deleteCollection/{topicId}")
-    public String deleteCollection(@PathVariable("topicId") Long topicId, HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        Collection collection = new Collection();
-        collection.setTopicId(topicId);
-        collection.setUserId(uid);
-        collectionService.deleteCollection(collection);
+    public String deleteFavourite(@PathVariable("topicId") Long topicId) {
+        favouriteService.deleteFavourite(topicId);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -48,9 +38,8 @@ public class CollectionController {
     }
 
     @GetMapping("/myCollections")
-    public String myCollection(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        List<TopicDTO> topicDTOS = collectionService.getCollectionsByUserId(uid);
+    public String myFavourite() {
+        List<TopicDTO> topicDTOS = favouriteService.getMyFavourites();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);

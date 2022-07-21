@@ -6,10 +6,12 @@ import com.su.community.mapper.*;
 import com.su.community.pojo.*;
 import com.su.community.service.FocusService;
 import com.su.community.service.TopicStatisticService;
+import com.su.community.utils.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class FocusServiceImpl implements FocusService {
     @Autowired
     private FollowMapper followMapper;
     @Autowired
-    private CollectionMapper collectionMapper;
+    private FavouriteMapper collectionMapper;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -30,11 +32,17 @@ public class FocusServiceImpl implements FocusService {
     @Autowired
     private FollowBoardMapper followBoardMapper;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
-    public List<TopicDTO> focusBoard(Long uid) {
+    public List<TopicDTO> focusBoard() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         QueryWrapper<FollowBoard> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", uid);
+        wrapper.eq("user_id", userId);
         List<FollowBoard> followBoards = followBoardMapper.selectList(wrapper);
         List<Integer> boardIds = new ArrayList<>();
         for (FollowBoard followBoard : followBoards) {
@@ -56,7 +64,7 @@ public class FocusServiceImpl implements FocusService {
             topicDTO.setBoard(boardName);
             topicDTO.setUser(user);
             TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicDTO.getId());
-            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setViews(topicStatisticService.getViews(topicDTO.getId()));
             topicDTO.setLikeCount(topicStatistic.getLikeCount());
             topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
             topicDTO.setCommentCount(topicStatistic.getCommentCount());
@@ -66,9 +74,10 @@ public class FocusServiceImpl implements FocusService {
     }
 
     @Override
-    public List<TopicDTO> focusUser(Long uid) {
+    public List<TopicDTO> focusUser() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         QueryWrapper<Follow> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", uid);
+        wrapper.eq("user_id", userId);
         List<Follow> follows = followMapper.selectList(wrapper);
         List<Long> userIds = new ArrayList<>();
         for (Follow follow : follows) {
@@ -89,7 +98,7 @@ public class FocusServiceImpl implements FocusService {
             topicDTO.setBoard(boardName);
             topicDTO.setUser(user);
             TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicDTO.getId());
-            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setViews(topicStatisticService.getViews(topicDTO.getId()));
             topicDTO.setLikeCount(topicStatistic.getLikeCount());
             topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
             topicDTO.setCommentCount(topicStatistic.getCommentCount());
@@ -99,12 +108,13 @@ public class FocusServiceImpl implements FocusService {
     }
 
     @Override
-    public List<TopicDTO> focusFavorite(Long uid) {
-        QueryWrapper<Collection> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", uid);
-        List<Collection> collections = collectionMapper.selectList(wrapper);
+    public List<TopicDTO> focusFavorite() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
+        QueryWrapper<Favourite> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
+        List<Favourite> collections = collectionMapper.selectList(wrapper);
         List<Long> topicIds = new ArrayList<>();
-        for (Collection collection : collections) {
+        for (Favourite collection : collections) {
             topicIds.add(collection.getTopicId());
         }
         QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
@@ -122,7 +132,7 @@ public class FocusServiceImpl implements FocusService {
             topicDTO.setBoard(boardName);
             topicDTO.setUser(user);
             TopicStatistic topicStatistic = topicStatisticService.getTopicStatistic(topicDTO.getId());
-            topicDTO.setViews(topicStatistic.getViews());
+            topicDTO.setViews(topicStatisticService.getViews(topicDTO.getId()));
             topicDTO.setLikeCount(topicStatistic.getLikeCount());
             topicDTO.setDislikeCount(topicStatistic.getDislikeCount());
             topicDTO.setCommentCount(topicStatistic.getCommentCount());

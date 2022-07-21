@@ -2,14 +2,12 @@ package com.su.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.su.community.dto.FolloweeDTO;
-import com.su.community.pojo.Follow;
 import com.su.community.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,12 +18,8 @@ public class FollowController {
     private FollowService followService;
 
     @GetMapping("/addFollow/{followeeId}")
-    public String addFollow(@PathVariable("followeeId") Long followeeId, HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        Follow follow = new Follow();
-        follow.setFolloweeId(followeeId);
-        follow.setUserId(uid);
-        followService.addFollow(follow);
+    public String addFollow(@PathVariable("followeeId") Long followeeId) {
+        followService.addFollow(followeeId);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -34,12 +28,8 @@ public class FollowController {
     }
 
     @GetMapping("/deleteFollow/{followeeId}")
-    public String deleteFollow(@PathVariable("followeeId") Long followeeId, HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        Follow follow = new Follow();
-        follow.setFolloweeId(followeeId);
-        follow.setUserId(uid);
-        followService.deleteFollow(follow);
+    public String deleteFollow(@PathVariable("followeeId") Long followeeId) {
+        followService.deleteFollow(followeeId);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -48,9 +38,8 @@ public class FollowController {
     }
 
     @GetMapping("/getFollowees")
-    public String getFollowees(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        List<FolloweeDTO> followeeDTOS = followService.getFollowees(uid);
+    public String getFollowees() {
+        List<FolloweeDTO> followeeDTOS = followService.getFollowees();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -60,9 +49,8 @@ public class FollowController {
     }
 
     @GetMapping("/getFans")
-    public String getFans(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        List<FolloweeDTO> followeeDTOS = followService.getFans(uid);
+    public String getFans() {
+        List<FolloweeDTO> followeeDTOS = followService.getFans();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);

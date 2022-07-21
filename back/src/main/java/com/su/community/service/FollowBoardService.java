@@ -1,9 +1,7 @@
 package com.su.community.service;
 
-import com.su.community.pojo.FollowBoard;
-
 public interface FollowBoardService {
-    void addFollowBoard(FollowBoard followBoard);
+    void addFollowBoard(Integer boardId);
 
-    void deleteFollowBoard(FollowBoard followBoard);
+    void deleteFollowBoard(Integer boardId);
 }

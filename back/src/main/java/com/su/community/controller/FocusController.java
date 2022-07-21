@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,9 +16,8 @@ public class FocusController {
     private FocusService focusService;
 
     @GetMapping("/focus/board")
-    public String focusBoard(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        List<TopicDTO> topicDTOS = focusService.focusBoard(uid);
+    public String focusBoard() {
+        List<TopicDTO> topicDTOS = focusService.focusBoard();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -29,9 +27,8 @@ public class FocusController {
     }
 
     @GetMapping("/focus/user")
-    public String focusUser(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        List<TopicDTO> topicDTOS = focusService.focusUser(uid);
+    public String focusUser() {
+        List<TopicDTO> topicDTOS = focusService.focusUser();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -41,9 +38,8 @@ public class FocusController {
     }
 
     @GetMapping("/focus/favorite")
-    public String focusFavorite(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        List<TopicDTO> topicDTOS = focusService.focusFavorite(uid);
+    public String focusFavorite() {
+        List<TopicDTO> topicDTOS = focusService.focusFavorite();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);

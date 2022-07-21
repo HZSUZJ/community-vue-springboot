@@ -2,12 +2,10 @@ package com.su.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.su.community.dto.ProfileDTO;
-import com.su.community.pojo.Profile;
 import com.su.community.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 @RestController
@@ -17,9 +15,8 @@ public class ProfileController {
     private ProfileService profileService;
 
     @GetMapping("/getOwnProfile")
-    public String getOwnProfile(HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        ProfileDTO profileDTO = profileService.getOwnProfile(uid);
+    public String getOwnProfile() {
+        ProfileDTO profileDTO = profileService.getOwnProfile();
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);
@@ -29,12 +26,8 @@ public class ProfileController {
     }
 
     @PostMapping("/updateSignature")
-    public String updateSignature(@RequestParam("signature") String signature, HttpServletRequest request) {
-        Long uid = (Long) request.getSession().getAttribute("UID");
-        Profile profile = new Profile();
-        profile.setSignature(signature);
-        profile.setUserId(uid);
-        profileService.updateProfile(profile);
+    public String updateSignature(@RequestParam("signature") String signature) {
+        profileService.updateProfile(signature);
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Object> map = new HashMap<>();
         map.put("code", 200);

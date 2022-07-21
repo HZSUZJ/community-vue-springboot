@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
-public class Collection {
+public class Favourite {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     private Long userId;

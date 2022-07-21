@@ -10,10 +10,12 @@ import com.su.community.pojo.Profile;
 import com.su.community.pojo.User;
 import com.su.community.service.ProfileService;
 import com.su.community.service.TopicService;
+import com.su.community.utils.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -25,9 +27,14 @@ public class ProfileServiceImpl implements ProfileService {
     private UserMapper userMapper;
     @Autowired
     private TopicService topicService;
+    @Autowired
+    private TokenUtil tokenUtil;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
-    public ProfileDTO getOwnProfile(Long userId) {
+    public ProfileDTO getOwnProfile() {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
         QueryWrapper<Profile> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         Profile profile = profileMapper.selectOne(wrapper);
@@ -40,7 +47,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updateProfile(Profile profile) {
+    public void updateProfile(String signature) {
+        Long userId = tokenUtil.getUserIdFromRequest(request);
+        Profile profile = new Profile();
+        profile.setSignature(signature);
+        profile.setUserId(userId);
         UpdateWrapper<Profile> wrapper = new UpdateWrapper<>();
         wrapper.eq("user_id", profile.getUserId()).set("signature", profile.getSignature());
         profileMapper.update(null, wrapper);
