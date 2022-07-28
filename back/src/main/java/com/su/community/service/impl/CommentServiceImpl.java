@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.su.community.dto.CommentDTO;
+import com.su.community.event.EventProducer;
 import com.su.community.mapper.CommentMapper;
 import com.su.community.mapper.TopicStatisticMapper;
 import com.su.community.mapper.UserMapper;
@@ -37,6 +38,8 @@ public class CommentServiceImpl implements CommentService {
     private TokenUtil tokenUtil;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private EventProducer eventProducer;
 
     @Override
     public void createComment(Long topicId, Long parentId, String content, Long topicUserId) {
@@ -61,8 +64,11 @@ public class CommentServiceImpl implements CommentService {
         topicStatisticMapper.update(null, updateWrapper);
         commentMapper.insert(comment);
         notification.setCommentId(comment.getId());
+        Event event = new Event();
+        event.setTopic("topic_notification");
+        event.setNotification(notification);
         if (!notification.getNotifier().equals(notification.getReceiver())) {
-            notificationService.addNotification(notification);
+            eventProducer.sendNotification(event);
         }
     }
 
